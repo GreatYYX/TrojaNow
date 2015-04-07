@@ -43,7 +43,7 @@ ALL of users' input should be filtered both on client and server for avoiding SQ
 Request:
 
     {
-    	"user: @string(0-9A-Za-z_, start with alphabet 6-12 length),
+    	"user": @string(0-9A-Za-z_, start with alphabet 6-12 length),
 		"password": @string(0-9A-Za-z_, start with alphabet, 6-12 length),
     	"nickname": @string(2-12 length)
     }
@@ -56,14 +56,13 @@ Request: OK
 
     {
     	"user": @string,
-		"password": @string
+		"password": @string,
+		"ip": @string(it could be IPV4/6)
     }
 
 Response: OK
 
 	{
-		"id": @int
-		"user": @string,
 		"token": @string
 	}
 
@@ -78,6 +77,20 @@ Request:
 
 Response: OK
 
+## PUT auth/info
+
+Request:
+
+    {
+    	"user": @string,
+		"token": @string,
+		"old_passowrd": @string | null,
+		"password": @string | null,
+    	"nickname": @string | null
+    }
+
+Response: OK
+
 ## POST statuses
 
 Request:
@@ -88,7 +101,7 @@ Request:
 		"content": @string,
 		"date": @string(UNIX timestamp),
 		"anonymous": @bool,
-		"temperature": @string | null,
+		"temperature": @string(unit in centigrade) | null,
 		"location": [@int(latitude), @int(longitude)] | null
     }
 
@@ -147,7 +160,7 @@ Request:
 Response: OK
 
 	{
-    	"ip": @string(it could be IPV4/6)
+    	"ip": @string
 	}
 
 

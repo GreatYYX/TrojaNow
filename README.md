@@ -5,7 +5,7 @@ For USC CSCI-578
 # Mobile App Components #
 
 - Database
-- Formatter
+- Parser
 - Accessor
 - Settings (k->v pairs)
 - Authentication
@@ -17,7 +17,7 @@ For USC CSCI-578
 
 # GUI #
 
-- Status
-- status - anonymous
-- chat -> friendlist
+- Status - normal
+- Status - anonymous
+- Chat -> friendlist
 - Me (setting)

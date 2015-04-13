@@ -9,7 +9,7 @@ References:
 - JSON formatter: `http://jsonformatter.curiousconcept.com/`
 
 # Common Request Format #
-- Domain: `trojanow.yyx.name:6666`
+- Domain: `www.example.com:1024`
 - Request: `METHOD` `Domain/[Resource URL].json`
 - Content-Type: `application/json`
 
@@ -26,9 +26,9 @@ References:
 - `409` CONFLICT
 - `500` INTERNAL_SERVER_ERROR
 
-# API #
+# Server API #
 
-All of the Resource URLs are explained below, including request body & response body with correct status code.
+All of the Resource URLs and METHOD with it are explained below, including request body & response body with correct status code.
 
 If error occurs, status code will be set, response body will be:
 
@@ -36,9 +36,26 @@ If error occurs, status code will be set, response body will be:
 		"error": @string(message)
 	}
 
-ALL of users' input should be filtered both on client and server for avoiding SQL injection or CSRF.
+If the request needs authorization, the header should include a `Authorization` field (noted as `AUTH` below). The value of this field is `user:token`.
 
-## POST auth/reg
+Remember aLL of users' input should be filtered both on client and server for avoiding SQL injection or CSRF.
+
+## POST /test
+
+Request:
+
+    {
+    	"test": "true"
+    }
+
+Response: OK
+
+	{
+		"test message": "correct :D"
+	}
+
+
+## POST /account/reg
 
 Request:
 
@@ -50,9 +67,9 @@ Request:
 
 Response: CREATED
 
-## GET auth/signin
+## PUT /account/signin
 
-Request: OK
+Request:
 
     {
     	"user": @string,
@@ -64,98 +81,88 @@ Response: OK
 
 	{
 		"token": @string
+		"timestamp": @string (UNIX timestamp)
 	}
 
-## GET auth/signout
+## GET /account/signout
 
 Request:
 
-    {
-    	"user": @string,
-		"token": @string
-    }
+	AUTH
 
 Response: OK
 
-## PUT auth/info
+## PUT /account/info
 
 Request:
 
+	AUTH
     {
-    	"user": @string,
-		"token": @string,
-		"old_passowrd": @string | null,
-		"password": @string | null,
     	"nickname": @string | null
     }
 
 Response: OK
 
-## POST statuses
+## POST /statuses
 
 Request:
 
+	AUTH
     {
-    	"user": @string,
-		"token": @string,
 		"content": @string,
-		"date": @string(UNIX timestamp),
 		"anonymous": @bool,
 		"temperature": @string(unit in centigrade) | null,
 		"location": [@int(latitude), @int(longitude)] | null
     }
 
-Response: GREATED
+Response: CREATED
 
 	{
 		"id": @int
+		"date": @int
 	}
 
-## DELETE statuses
+## DELETE /statuses/:id
 
 Request:
 
-    {
-    	"user": @string,
-		"token": @string,
-		"id": @int
-    }
+	AUTH
 
 Response: OK
 
-## GET statuses
+## GET /statuses(/:type[normal|anonymous|unconstrained])
 
 Request:
 
-    {
-    	"user": @string,
-		"token": @string,
-		"anonymous": @bool(true will only return anonymous status, false will only return normal status)
-    }
+	AUTH
 
 Response: OK
 
-	[
-		{
-	    	"auther": @string,
-			"content": @string,
-			"date": @string(UNIX timestamp),
-			"temperature": @string | null,
-			"location": [@int(latitude), @int(longitude)] | null
-	    },
-		{...},
-		{...}
-	]
+	{
+		"next_cursor": @int(not support yet),
+		"statuses": [
+			{
+				"id": @int,
+		    	"author": @string,
+		    	"author_nickname": @string,
+				"content": @string,
+				"date": @string(UNIX timestamp),
+				"temperature": @string | null,
+				"location": [@int(latitude), @int(longitude)] | null
+		    },
+			{...},
+			{...}
+		]
+	}
 
-## GET chat
+In request, type is optional, default value is unconstrained.
+Server will return at most 20 statuses once.
+
+## GET /chat/:friend
 
 Request:
-
-    {
-    	"user": @string,
-		"token": @string,
-		"friend": @string(target user)
-    }
+	
+	AUTH
 
 Response: OK
 
@@ -164,57 +171,99 @@ Response: OK
 	}
 
 
-## POST friends
+## POST /friends
 
 Request:
 
+	AUTH
     {
-    	"user": @string,
-		"token": @string,
 		"friend": @string
     }
 
 Response: OK
 
-## GET friends
+## PUT /friends/:friend
 
 Request:
 
-    {
-    	"user": @string,
-		"token": @string
-    }
+	AUTH
+	{
+		"accept": @bool
+	}
+
+This is for accepting new friend request or not.
+
+## GET /friends
+
+Request:
+
+    AUTH
 
 Response: OK
 
-    [
-		@string,
-		@string,
-		...,
-		@string
-	]
+	{
+		"friends": [
+			@string,
+			@string,
+			...,
+			@string
+		]
+	}
 
-## DELETE friends
+## DELETE /friends/:id
 
 Request:
 
-    {
-    	"user": @string,
-		"token": @string,
-		"friend": @string
-    }
+    AUTH
 
 Response: OK
 
-## PUT sessions
+## PUT /sessions
 
 Request:
 
+	AUTH
     {
-    	"user": @string,
-		"token": @string,
 		"location": [@int, @int],
 		"temperature": @string
     }
 
 Response: OK
+
+# Server Pushed Notification
+
+Server will push back notifications to client by MQTT protocol. Client should also connect to MQTT server when signing in.
+
+## New friend request
+
+	{
+		"type": "NEW_FRIEND",
+		"data": {
+			"user": @string
+		}
+	}
+
+## Accepted new friend request
+	
+	{
+		"type": "NEW_FRIEND_ACCEPT",
+		"data": {
+			"user": @string,
+			"nickname": @string
+		}
+	}
+
+## Rejected new friend request
+	
+	{
+		"type": "NEW_FRIEND_REJECT",
+		"data": {
+			"user": @string
+		}
+	}
+
+## New status available
+
+	{
+		"type": "NEW_STATUS"
+	}

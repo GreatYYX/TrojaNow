@@ -1,0 +1,23 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Profile">
+
+        <EditTextPreference
+            android:key="nickname"
+            android:title="Nickname"
+            android:dialogTitle="Modify nickname"
+        />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Local">
+
+        <CheckBoxPreference
+            android:key="record_pwd"
+            android:title="Remember password"
+        />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,6 @@
+include ':app'
+//include ':libs:PullToRefresh'
+include ':libs:QuickScroll'
+include ':libs:PagerSlidingTabStrip'
+//include ':libs:SwipeMenuListView'
+//include ':libs:Paho'

@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "name.yyx.trojanow"
+        minSdkVersion 11
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+//        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //    compile project(':libs:PullToRefresh')
+    compile project(':libs:QuickScroll')
+    compile project(':libs:PagerSlidingTabStrip')
+//    compile project(':libs:Paho')
+    //    compile project(':libs:SwipeMenuListView')
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:recyclerview-v7:22.0.0'
+//    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile 'com.navercorp.pulltorefresh:library:3.2.0@aar'
+//    compile files('libs/wmqtt.jar')
+}

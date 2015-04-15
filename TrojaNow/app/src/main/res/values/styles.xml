@@ -17,7 +17,8 @@
         <item name="android:background">@color/green_dark</item>
         <!-- Support library compatibility -->
         <item name="background">@color/green_dark</item>
-        <!--<item name="android:displayOptions">useLogo|showHome|showTitle</item>-->
+        <item name="icon">@mipmap/actbar_icon</item>
+        <item name="displayOptions">useLogo|showHome|showTitle</item>
     </style>
 
     <!-- button on action bar -->

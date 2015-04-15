@@ -1,6 +1,9 @@
 package name.yyx.trojanow;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,29 +11,39 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import name.yyx.trojanow.mqtt.MqttManager;
+
 
 public class MainActivity extends ActionBarActivity {
+
+    public static final String TAG = "MainActivity";
 
     private ViewPager viewpager;
     private PagerSlidingTabStrip strip;
     private MainPagerAdapter adapter;
+    private MqttManager mqttMgr;
+    private ServiceReceiver recv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // splash
-//        Intent intentSplash = new Intent(this, SplashActivity.class);
-//        startActivity(intentSplash);
+        Intent intentSplash = new Intent(this, SplashActivity.class);
+        startActivity(intentSplash);
 
         // sign in
-        Intent intent = new Intent(this, SigninActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, SigninActivity.class);
+//        startActivity(intent);
 
         setContentView(R.layout.activity_main);
 
@@ -49,8 +62,22 @@ public class MainActivity extends ActionBarActivity {
         strip.setIndicatorHeight(6);
         strip.setIndicatorColor(getResources().getColor(R.color.green_dark));
         strip.setBackgroundColor(getResources().getColor(R.color.green_light));
+
+        mqttMgr = new MqttManager(getApplicationContext(), "yyx");
+        mqttMgr.start();
+
+        recv = new ServiceReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("name.yyx.trojanow.mqtt.RECV_MSG");
+        registerReceiver(recv, filter);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mqttMgr.stop();
+        unregisterReceiver(recv);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,6 +123,34 @@ public class MainActivity extends ActionBarActivity {
         strip.notifyDataSetChanged();
     }
 
+    /**
+     * Handle broadcast message from service
+     */
+    public class ServiceReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d(TAG, "receive from service");
+            Bundle bundle = intent.getExtras();
+            String data = bundle.getString("data");
+
+            try {
+                JSONObject serviceMsg = new JSONObject(data);
+                String type = serviceMsg.getString("type");
+                if(type.equals("NEW_STATUS")) {
+                    addNotificationDot(0);
+                }
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * Handle notification dot
+     */
     public class MainPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTitleProvider {
 
         private int[] notificationState = {0, 0, 0};

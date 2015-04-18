@@ -1,7 +1,6 @@
 package name.yyx.trojanow;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
@@ -15,10 +14,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import name.yyx.trojanow.widget.ProgressCircle;
+
 
 public class NewStatusActivity extends ActionBarActivity {
     private static final String TAG = "NewStatusActivity";
-    private ProgressDialog pd;
+    private ProgressCircle pCircle;
     private EditText editTextStatus;
 
     @Override
@@ -94,15 +95,15 @@ public class NewStatusActivity extends ActionBarActivity {
     protected void onStop() {
         super.onStop();
         // avoid window leak
-        if(pd != null) {
-            pd.dismiss();
+        if(pCircle != null) {
+            pCircle.dismiss();
         }
     }
 
     public boolean post() {
         // hide keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editTextStatus.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
         // invalid status
         if(editTextStatus.getText().toString().equals("")) {
@@ -112,10 +113,8 @@ public class NewStatusActivity extends ActionBarActivity {
         }
 
         // post
-        pd = new ProgressDialog(this, R.style.MyTheme);
-        pd.setCancelable(false);
-        pd.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
-        pd.show();
+        pCircle = new ProgressCircle(this);
+        pCircle.show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

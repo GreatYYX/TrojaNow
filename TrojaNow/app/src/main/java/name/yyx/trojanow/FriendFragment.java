@@ -84,7 +84,7 @@ public class FriendFragment extends Fragment {
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_friend, container, false);
         list = (ListView)rootView.findViewById(R.id.list_friend);
         scroll = (QuickScroll)rootView.findViewById(R.id.quickscroll);
-        search = (EditText)rootView.findViewById(R.id.et_seatch);
+        search = (EditText)rootView.findViewById(R.id.et_search);
         list.setAdapter(adapter);
 
         scroll.init(QuickScroll.TYPE_INDICATOR_WITH_HANDLE, list, adapter, QuickScroll.STYLE_HOLO);

@@ -1,26 +1,88 @@
 package name.yyx.trojanow;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+
+import name.yyx.trojanow.widget.ProgressCircle;
 
 
 public class SigninActivity extends ActionBarActivity {
 
+    private ProgressCircle pCircle;
+    private Button btnSignin;
+    private Button btnRegister;
+    private EditText etUser;
+    private EditText etPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // splash
+//        startActivity(new Intent(SigninActivity.this, SplashActivity.class));
+
+        // judge if already signed in
+//        if(call controller, already logined {
+//            startActivity(new Intent(this, MainActivity.class));
+//            finish();
+//        }
+
         setContentView(R.layout.activity_signin);
+        setTitle(getString(R.string.title_activity_signin));
 
-        Button clickButton = (Button) findViewById(R.id.btn_singin);
-        clickButton.setOnClickListener( new View.OnClickListener() {
-
+        pCircle = new ProgressCircle(SigninActivity.this);
+        btnSignin = (Button)findViewById(R.id.btn_signin);
+        btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                // hide keyboard
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                // pop progress circle
+                pCircle.show();
+                //execute working thread
+                Runnable run = new Runnable() {
+                    @Override
+                    public void run() {
+                        etUser = (EditText)findViewById(R.id.et_username);
+                        etPassword = (EditText)findViewById(R.id.et_password);
+                        String user = etUser.getText().toString();
+                        String password = etPassword.getText().toString();
+//                        if(success) {
+//                            controller record token
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+//                            startActivity(new Intent(SigninActivity.this, MainActivity.class));
+//                            finish();
+//                        } else {
+//
+//                        }
+                        pCircle.dismiss();
+                    }
+                };
+                new Thread(run).start();
             }
         });
+
+
+        btnRegister = (Button)findViewById(R.id.btn_register);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // avoid window leak
+        if(pCircle != null) {
+            pCircle.dismiss();
+        }
     }
 
 }

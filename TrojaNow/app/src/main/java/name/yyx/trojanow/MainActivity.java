@@ -38,12 +38,12 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         // splash
-        Intent intentSplash = new Intent(this, SplashActivity.class);
-        startActivity(intentSplash);
+//        Intent intentSplash = new Intent(this, SplashActivity.class);
+//        startActivity(intentSplash);
 
         // sign in
-//        Intent intent = new Intent(this, SigninActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, SigninActivity.class);
+        startActivity(intent);
 
         setContentView(R.layout.activity_main);
 

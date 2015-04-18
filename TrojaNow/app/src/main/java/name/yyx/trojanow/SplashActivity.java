@@ -6,7 +6,7 @@ import android.os.Handler;
 
 
 public class SplashActivity extends Activity {
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
+    private final int SPLASH_DISPLAY_LENGTH = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,8 +16,6 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-//                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-//                startActivity(mainIntent);
                 finish();
             }
         }, SPLASH_DISPLAY_LENGTH);

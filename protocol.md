@@ -80,8 +80,8 @@ Request:
 Response: OK
 
 	{
-		"token": @string
-		"timestamp": @string (UNIX timestamp)
+		"token": @string,
+		"timestamp": @string (UNIX timestamp, not support yet)
 	}
 
 ## GET /account/signout

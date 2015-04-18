@@ -32,13 +32,9 @@ public class HttpAccessor {
     public JSONObject post(String url, JSONObject request) {
 
         HttpClient client = new DefaultHttpClient();
-//        String url = "http://trojanow.yyx.name:1234/test";
-//        JSONObject request = new JSONObject();
         JSONObject response = null;
 
         try {
-//            request.put("test", "test");
-
             //set request header and body
             StringEntity stringEntity = new StringEntity(request.toString());
             stringEntity.setContentType("application/json");
@@ -52,9 +48,6 @@ public class HttpAccessor {
             String respMsg = EntityUtils.toString(httpEntity);
 
             response = new JSONObject(respMsg);
-            //        if (jsonObject.getInt("success") == 200){
-            //            Log.i("lalala", "lalalla");
-            //        }
             Log.i("respMsg", respMsg);
 
         } catch (JSONException e) {
@@ -66,7 +59,6 @@ public class HttpAccessor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return response;
     }
 
@@ -108,7 +100,6 @@ public class HttpAccessor {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return response;
     }
 

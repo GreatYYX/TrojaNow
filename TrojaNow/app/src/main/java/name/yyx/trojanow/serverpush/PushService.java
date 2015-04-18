@@ -1,4 +1,4 @@
-package name.yyx.trojanow.mqtt;
+package name.yyx.trojanow.serverpush;
 
 import java.io.IOException;
 
@@ -10,7 +10,6 @@ import com.ibm.mqtt.MqttPersistenceException;
 import com.ibm.mqtt.MqttSimpleCallback;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -60,6 +59,7 @@ public class PushService extends Service
 	private static final String		ACTION_STOP = MQTT_CLIENT_ID + ".STOP";
 	private static final String		ACTION_KEEPALIVE = MQTT_CLIENT_ID + ".KEEP_ALIVE";
 	private static final String		ACTION_RECONNECT = MQTT_CLIENT_ID + ".RECONNECT";
+    public static final String     ACTION_BROADCAST = "name.yyx.trojanow.mqtt.RECV_MSG";
 	
 	// Connection log for the push service. Good for debugging.
 	private ConnectionLog 			mLog;
@@ -547,7 +547,7 @@ public class PushService extends Service
 			//showNotification(s);
             Intent intent = new Intent();
             intent.putExtra("data", s);
-            intent.setAction("name.yyx.trojanow.mqtt.RECV_MSG");
+            intent.setAction(ACTION_BROADCAST);
             sendBroadcast(intent);
             log("Broadcast intent: " + intent);
 

@@ -14,7 +14,7 @@ public class Account {
 
     private String token;
 
-    private Date timestamp;
+    private Date timeStamp;
 
     public String getUsername() {
         return username;
@@ -32,8 +32,8 @@ public class Account {
         return token;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getTimeStamp() {
+        return timeStamp;
     }
 
     public void setUsername(String username) {
@@ -52,7 +52,7 @@ public class Account {
         this.token = token;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

@@ -21,33 +21,35 @@ public class AccountImpl implements IAccount{
 
     private Account account;
 
+    private String url;
+
     public Account signIn(Account account){
 
+        url = "http://trojanow.yyx.name:1234/";
         this.account = account;
 
-//        AccountSignIn accountSignIn = new AccountSignIn();
-//        accountSignIn.execute();
+//      AccountSignIn accountSignIn = new AccountSignIn();
+//      accountSignIn.execute();
 
         JSONObject jsonObject = new JSONObject();
+        String token = null;
+        long timestamp = 0l;
+
         try {
             jsonObject.put("user",account.getUsername());
             jsonObject.put("password", account.getPassword());
             jsonObject.put("ip", account.getIp());
 
-
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.put("http://trojanow.yyx.name:1234/account/signin", jsonObject);
+            response = httpAccessor.put(url + "account/signin", jsonObject);
 
             if (response != null){
-                String token = "";
-                long timestamp = 0l;
                 Date time;
                 token = (String)response.get("token");
-//                timestamp = (long)response.get("timestamp");
-
-//                time = new Date(timestamp);
+//              timestamp = (long)response.get("timestamp");
+//              time = new Date(timestamp);
                 account.setToken(token);
-//                account.setTimestamp(time);
+//              account.setTimestamp(time);
             }
             else {
                 Log.i("AccountImpl", "account error");

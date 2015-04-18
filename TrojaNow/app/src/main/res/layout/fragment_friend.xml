@@ -3,7 +3,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <EditText android:id="@+id/et_seatch"
+    <EditText android:id="@+id/et_search"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/et_search"

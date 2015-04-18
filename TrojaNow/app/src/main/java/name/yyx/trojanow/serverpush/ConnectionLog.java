@@ -1,4 +1,4 @@
-package name.yyx.trojanow.mqtt;
+package name.yyx.trojanow.serverpush;
 
 import java.io.BufferedWriter;
 import java.io.File;

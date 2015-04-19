@@ -1,18 +1,15 @@
 package name.yyx.trojanow;
 
 import android.content.Context;
-import android.util.Log;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -99,13 +96,7 @@ public class StatuesFragment extends Fragment {
             }
         });
 
-        pullToRefreshView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Toast.makeText(getActivity(), "position " + position + " clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        pullToRefreshView.setRefreshing();
 
         return rootView;
     }

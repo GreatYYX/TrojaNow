@@ -11,48 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
-
-            <EditText
-            android:id="@+id/et_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:hint="@string/username"
-            android:textColorHint="#cccccc"/>
-        </LinearLayout>
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-2dp"
-            android:padding="10dp"
-            android:hint="Your password"
-            android:textColorHint="#cccccc"
-            android:password="true"/>
-        <EditText
-            android:id="@+id/et_password_again"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-2dp"
-            android:padding="10dp"
-            android:hint="Your password again"
-            android:textColorHint="#cccccc"
-            android:password="true"/>
-        <EditText
-            android:id="@+id/et_nickname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-2dp"
-            android:padding="10dp"
-            android:hint="Nick name"
-            android:textColorHint="#cccccc"/>
         <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"

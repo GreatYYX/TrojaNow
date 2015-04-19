@@ -55,7 +55,7 @@ public class MainActivity extends ActionBarActivity {
                 addNotificationDot(0);
             }
         });
-        pushMgr.start();
+//        pushMgr.start();
     }
 
     @Override
@@ -87,15 +87,7 @@ public class MainActivity extends ActionBarActivity {
                 addNotificationDot(0);
                 break;
             case R.id.menu_item_add_friend:
-//                removeNotificationDot(0);
-                Controller controller = (Controller)getApplicationContext();
-                if (controller.signOut()){
-                    intent = new Intent(this, SigninActivity.class);
-                    startActivity(intent);
-                }
-                else{
-                    Log.i("main activity", "log out error");
-                }
+                removeNotificationDot(0);
                 break;
             case R.id.menu_item_settings:
                 intent = new Intent(this, SettingActivity.class);

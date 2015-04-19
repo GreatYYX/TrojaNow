@@ -21,6 +21,7 @@
     <string name="password">Password</string>
     <string name="signin">Sign In</string>
     <string name="register">Register</string>
+    <string name="signout">Sign Out</string>
     <string name="title_activity_register">RegisterActivity</string>
 
     <string name="hello_world">Hello world!</string>

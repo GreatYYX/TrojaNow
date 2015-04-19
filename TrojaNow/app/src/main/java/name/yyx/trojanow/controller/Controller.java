@@ -19,10 +19,6 @@ public class Controller extends Application{
 
     private IAccount accountService;
 
-    public Controller(){
-        account = new Account();
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +26,10 @@ public class Controller extends Application{
     }
 
     private void read(){
+
+        if(account == null){
+            account = new Account();
+        }
         SharedPreferences sharedPref = getSharedPreferences(TROJANOW_PREFERENCES, MODE_PRIVATE);
         String username = sharedPref.getString("user", null);
         String token = sharedPref.getString("token", null);
@@ -56,7 +56,9 @@ public class Controller extends Application{
 
     public boolean signIn(String username, String password){
         accountService = new AccountImpl();
-
+        if(account == null){
+            account = new Account();
+        }
         account.setUsername(username);
         account.setPassword(password);
         account.setIp("");

@@ -38,7 +38,7 @@ public class AccountImpl implements IAccount{
             response = httpAccessor.put(url + "account/signin", request);
 
             if (response == null){
-                Log.i("AccountImpl", "sign in error");
+                Log.i("AccountImpl", "sign in error1");
             }
 
             if ((int)response.get("statusCode") == STATUS_OK){
@@ -48,6 +48,9 @@ public class AccountImpl implements IAccount{
 //              time = new Date(timestamp);
                 account.setToken(token);
 //              account.setTimestamp(time);
+            }
+            else{
+                Log.i("AccountImpl", "sign in error2");
             }
         } catch (JSONException e) {
             e.printStackTrace();

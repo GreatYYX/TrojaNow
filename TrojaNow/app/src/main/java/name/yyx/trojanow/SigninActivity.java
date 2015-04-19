@@ -26,10 +26,6 @@ public class SigninActivity extends ActionBarActivity {
     private EditText etPassword;
     private Handler handler;
 
-    private static final int PROGRESS_START = 0;
-    private static final int PROGRESS_END = 1;
-    private static final int PROGRESS_ERROR = 2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,28 +49,27 @@ public class SigninActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                 // hide keyboard
+                // hide keyboard
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 //execute working thread
-                 Runnable run = new Runnable() {
+                Runnable run = new Runnable() {
                     @Override
                     public void run() {
-                        new Message().obtain(handler, PROGRESS_START).sendToTarget();
+                        new Message().obtain(handler, ProgressCircle.START).sendToTarget();
 
                         etUser = (EditText)findViewById(R.id.et_username);
                         etPassword = (EditText)findViewById(R.id.et_password);
                         String user = etUser.getText().toString();
                         String password = etPassword.getText().toString();
 
-                        if(controller.signIn(user,password)) {
-                            startActivity(new Intent(SigninActivity.this, MainActivity.class));
-                            finish();
+                        if(controller.signIn(user, password)) {
+                            new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
                         } else {
-                            new Message().obtain(handler, PROGRESS_ERROR).sendToTarget();
+                            new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
                         }
 
-                        new Message().obtain(handler, PROGRESS_END).sendToTarget();
+                        new Message().obtain(handler, ProgressCircle.END).sendToTarget();
                     }
                 };
                 new Thread(run).start();
@@ -83,26 +78,7 @@ public class SigninActivity extends ActionBarActivity {
         btnRegister = (Button)findViewById(R.id.btn_register);
 
         // update UI
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch(msg.what) {
-                    case PROGRESS_START:
-                        pCircle.show();
-                        break;
-                    case PROGRESS_END:
-                        pCircle.dismiss();
-                        break;
-                    case PROGRESS_ERROR:
-                        Toast.makeText(SigninActivity.this, "Sign in failed!", Toast.LENGTH_SHORT).show();
-//                        pCircle.dismiss();
-                        break;
-                    default:
-                        super.handleMessage(msg);
-                }
-                removeMessages(msg.what);
-            }
-        };
+        handler = new MessageHandler();
     }
 
     @Override
@@ -114,4 +90,27 @@ public class SigninActivity extends ActionBarActivity {
         }
     }
 
+    class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case ProgressCircle.START:
+                    pCircle.show();
+                    break;
+                case ProgressCircle.END:
+                    pCircle.dismiss();
+                    break;
+                case ProgressCircle.SUCCESS:
+                    startActivity(new Intent(SigninActivity.this, MainActivity.class));
+                    finish();
+                    break;
+                case ProgressCircle.ERROR:
+                    Toast.makeText(SigninActivity.this, "Sign in failed!", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+            removeMessages(msg.what);
+        }
+    }
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,34 +15,47 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import name.yyx.trojanow.service.ISensor;
+import name.yyx.trojanow.service.Sensor;
 import name.yyx.trojanow.widget.ProgressCircle;
 
 
 public class NewStatusActivity extends ActionBarActivity {
     private static final String TAG = "NewStatusActivity";
     private ProgressCircle pCircle;
-    private EditText editTextStatus;
+    private Sensor sensor;
+    private EditText etStatus;
+    private CheckBox cbAnonymous;
+    private CheckBox cbLocation;
+    private CheckBox cbTemperature;
+
+    private int temperature;
+    private String[] location;
+
+    private Handler handler;
+    private Runnable run;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_status);
 
-        editTextStatus = (EditText)findViewById(R.id.et_status);
+        etStatus = (EditText)findViewById(R.id.et_status);
+        cbAnonymous = (CheckBox)findViewById(R.id.cb_anonymous);
+        cbLocation = (CheckBox)findViewById(R.id.cb_location);
+        cbTemperature = (CheckBox)findViewById(R.id.cb_temperature);
 
         // bundle anonymous checkbox with location checkbox
-        CheckBox anonymous = (CheckBox)findViewById(R.id.cb_anonymous);
-        anonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            CheckBox location = (CheckBox)findViewById(R.id.cb_location);
+        cbAnonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             boolean location_checked;
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    location.setEnabled(false);
-                    location_checked = location.isChecked();
-                    location.setChecked(true);
+                    cbLocation.setEnabled(false);
+                    location_checked = cbLocation.isChecked();
+                    cbLocation.setChecked(true);
                 } else {
-                    location.setChecked(location_checked);
-                    location.setEnabled(true);
+                    cbLocation.setChecked(location_checked);
+                    cbLocation.setEnabled(true);
                 }
 
             }
@@ -73,22 +87,21 @@ public class NewStatusActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if(!editTextStatus.getText().toString().equals("")) {
+        // draft
+        if(!etStatus.getText().toString().equals("")) {
             new AlertDialog.Builder(this)
                     .setMessage(getString(R.string.discard_new_status_confirmation))
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-//                            NewStatusActivity.this.finish();
                             NewStatusActivity.super.onBackPressed();
                         }
                     })
                     .setNegativeButton(getString(R.string.no), null)
                     .show();
         } else {
-            super.onBackPressed();
+            finish();
         }
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -100,29 +113,89 @@ public class NewStatusActivity extends ActionBarActivity {
         }
     }
 
-    public boolean post() {
+    public void post() {
         // hide keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
+        // get content
+        String status = etStatus.getText().toString();
+        boolean isAnonymous = cbAnonymous.isChecked();
+        boolean hasLocation = cbLocation.isChecked();
+        boolean hasTemperature = cbTemperature.isChecked();
+
         // invalid status
-        if(editTextStatus.getText().toString().equals("")) {
-            Toast.makeText(NewStatusActivity.this, "Empty!", Toast.LENGTH_SHORT).show();
-//            imm.showSoftInput(editTextStatus, 0);
-            return false;
+        if(status.equals("")) {
+            Toast.makeText(NewStatusActivity.this, "Empty status!", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // post
-        pCircle = new ProgressCircle(this);
-        pCircle.show();
-        new Handler().postDelayed(new Runnable() {
+        // set sensor
+        handler = new MessageHandler();
+        sensor = new Sensor(getApplicationContext(), new ISensor() {
+            @Override
+            public void onDataReceived() {
+                if(sensor.canGetInfo()) {
+                    temperature = sensor.getTemperature();
+                    location = sensor.getLocation();
+                    new Thread(run).start();
+                } else {
+                    pCircle.dismiss();
+                    Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFail() {
+                pCircle.dismiss();
+                Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // set post thread
+        run = new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(NewStatusActivity.this, "post successfully", Toast.LENGTH_SHORT).show();
-                NewStatusActivity.super.onBackPressed();
+
+                try {
+                    Thread.sleep(2000);
+                } catch(InterruptedException e){
+
+                }
+//                if(controller post new status fail) {
+//                    new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
+//                } else {
+                    new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
+//                }
             }
-        }, 2000);
-        return true;
+        };
+
+        // start post
+        pCircle = new ProgressCircle(this);
+        pCircle.show();
+        if(hasLocation || hasTemperature) {
+            sensor.update();
+        } else {
+            new Thread(run).start();
+        }
+    }
+
+    class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case ProgressCircle.SUCCESS:
+                    Toast.makeText(NewStatusActivity.this, "post successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+                case ProgressCircle.ERROR:
+                    Toast.makeText(NewStatusActivity.this, "Post failed!", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+            pCircle.dismiss();
+            removeMessages(msg.what);
+        }
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by dell on 2015/4/17.
  */
-public class Account {
+public class Account implements Cloneable{
     private  String username;
 
     private String password;
@@ -55,4 +55,5 @@ public class Account {
     public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
     }
+
 }

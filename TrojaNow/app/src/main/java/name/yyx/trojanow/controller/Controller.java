@@ -26,18 +26,16 @@ public class Controller extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        account = read();
+        read();
     }
 
-    private Account read(){
+    private void read(){
         SharedPreferences sharedPref = getSharedPreferences(TROJANOW_PREFERENCES, MODE_PRIVATE);
         String username = sharedPref.getString("user", null);
         String token = sharedPref.getString("token", null);
 
         account.setUsername(username);
         account.setToken(token);
-
-        return account;
     }
 
     private void write(){
@@ -45,7 +43,14 @@ public class Controller extends Application{
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("user", account.getUsername());
         editor.putString("token", account.getToken());
-//        editor.putLong("timeStamp",)
+        editor.commit();
+    }
+
+    private void remove(){
+        SharedPreferences sharedPref = getSharedPreferences(TROJANOW_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove("user");
+        editor.remove("token");
         editor.commit();
     }
 
@@ -69,12 +74,23 @@ public class Controller extends Application{
         if(account == null){
             return false;
         }
-
         if(account.getToken() == null){
             return false;
         }
         else{
             return true;
+        }
+    }
+
+    public boolean signOut(){
+        accountService = new AccountImpl();
+        if(accountService.signOut(account)){
+            remove();
+            account = null;
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

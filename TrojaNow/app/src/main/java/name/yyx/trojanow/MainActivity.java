@@ -8,11 +8,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.serverpush.IServerPush;
 import name.yyx.trojanow.serverpush.ServerPushManager;
 
@@ -85,7 +87,15 @@ public class MainActivity extends ActionBarActivity {
                 addNotificationDot(0);
                 break;
             case R.id.menu_item_add_friend:
-                removeNotificationDot(0);
+//                removeNotificationDot(0);
+                Controller controller = (Controller)getApplicationContext();
+                if (controller.signOut()){
+                    intent = new Intent(this, SigninActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Log.i("main activity", "log out error");
+                }
                 break;
             case R.id.menu_item_settings:
                 intent = new Intent(this, SettingActivity.class);

@@ -53,7 +53,7 @@ public class MainActivity extends ActionBarActivity {
                 addNotificationDot(0);
             }
         });
-        pushMgr.start();
+//        pushMgr.start();
     }
 
     @Override

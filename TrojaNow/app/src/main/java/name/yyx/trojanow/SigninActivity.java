@@ -2,17 +2,17 @@ package name.yyx.trojanow;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
-
-import name.yyx.trojanow.controller.Controller;
 import android.widget.EditText;
 
+import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.widget.ProgressCircle;
 
 
@@ -24,6 +24,11 @@ public class SigninActivity extends ActionBarActivity {
     private Button btnRegister;
     private EditText etUser;
     private EditText etPassword;
+    private Handler handler;
+
+    private static final int PROGRESS_START = 0;
+    private static final int PROGRESS_END = 1;
+    private static final int PROGRESS_ERROR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +56,12 @@ public class SigninActivity extends ActionBarActivity {
                  // hide keyboard
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-
-                // pop progress circle
-                pCircle.show();
-
                 //execute working thread
-                Runnable run = new Runnable() {
+                 Runnable run = new Runnable() {
                     @Override
                     public void run() {
+                        new Message().obtain(handler, PROGRESS_START).sendToTarget();
+
                         etUser = (EditText)findViewById(R.id.et_username);
                         etPassword = (EditText)findViewById(R.id.et_password);
                         String user = etUser.getText().toString();
@@ -68,15 +71,38 @@ public class SigninActivity extends ActionBarActivity {
                             startActivity(new Intent(SigninActivity.this, MainActivity.class));
                             finish();
                         } else {
-//                            Toast.makeText(SigninActivity.this,"False",Toast.LENGTH_SHORT ).show();
+                            new Message().obtain(handler, PROGRESS_ERROR).sendToTarget();
                         }
-                        pCircle.dismiss();
+
+                        new Message().obtain(handler, PROGRESS_END).sendToTarget();
                     }
                 };
                 new Thread(run).start();
             }
         });
         btnRegister = (Button)findViewById(R.id.btn_register);
+
+        // update UI
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch(msg.what) {
+                    case PROGRESS_START:
+                        pCircle.show();
+                        break;
+                    case PROGRESS_END:
+                        pCircle.dismiss();
+                        break;
+                    case PROGRESS_ERROR:
+                        Toast.makeText(SigninActivity.this, "Sign in failed!", Toast.LENGTH_SHORT).show();
+//                        pCircle.dismiss();
+                        break;
+                    default:
+                        super.handleMessage(msg);
+                }
+                removeMessages(msg.what);
+            }
+        };
     }
 
     @Override

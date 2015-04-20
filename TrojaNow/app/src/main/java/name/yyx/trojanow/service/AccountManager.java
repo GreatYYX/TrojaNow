@@ -87,7 +87,6 @@ public class AccountManager implements IAccount{
             request.put("user", account.getUsername());
             request.put("password", account.getPassword());
             request.put("nickname", account.getNickname());
-            request.put("auth", false);
 
             HttpAccessor httpAccessor = new HttpAccessor();
             response = httpAccessor.post(URL + "account/reg",request);
@@ -102,6 +101,7 @@ public class AccountManager implements IAccount{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.i("mnb", "cao");
         return false;
     }
 

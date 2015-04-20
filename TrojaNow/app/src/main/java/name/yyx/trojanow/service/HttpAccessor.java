@@ -60,7 +60,12 @@ public class HttpAccessor {
             int statusCode = statusLine.getStatusCode();
             String respMsg = EntityUtils.toString(httpEntity);
 
-            response = new JSONObject(respMsg);
+            if(respMsg.equals("[]")){
+                response = new JSONObject();
+            }
+            else {
+                response = new JSONObject(respMsg);
+            }
             response.put("statusCode",statusCode);
             Log.i("respMsg", respMsg);
 

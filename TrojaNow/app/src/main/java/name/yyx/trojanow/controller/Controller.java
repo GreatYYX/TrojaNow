@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import name.yyx.trojanow.entity.Account;
+import name.yyx.trojanow.service.AccountManager;
 import name.yyx.trojanow.service.IAccount;
-import name.yyx.trojanow.service.impl.AccountImpl;
 
 /**
  * Created by dell on 2015/4/17.
@@ -55,7 +55,7 @@ public class Controller extends Application{
     }
 
     public boolean signIn(String username, String password){
-        accountService = new AccountImpl();
+        accountService = new AccountManager();
         if(account == null){
             account = new Account();
         }
@@ -64,28 +64,30 @@ public class Controller extends Application{
         account.setIp("");
         account =  accountService.signIn(account);
 
-        if (account.getToken() == null){
+        if (account.getToken() != null){
+            write();
+            Log.i("Controller", account.getToken());
+            return true;
+        }
+        else{
             return false;
         }
-        Log.i("Controller", account.getToken());
-        write();
-        return true;
     }
 
     public boolean isSignedIn(){
         if(account == null){
             return false;
         }
-        if(account.getToken() == null){
-            return false;
+        if(account.getToken() != null){
+            return true;
         }
         else{
-            return true;
+            return false;
         }
     }
 
     public boolean signOut(){
-        accountService = new AccountImpl();
+        accountService = new AccountManager();
         if(accountService.signOut(account)){
             remove();
             account = null;
@@ -96,6 +98,19 @@ public class Controller extends Application{
         }
     }
 
+    public boolean registration(String username, String password, String nickname){
+        account = new Account();
+        accountService = new AccountManager();
 
+        account.setUsername(username);
+        account.setPassword(password);
+        account.setNickname(nickname);
 
+        if(accountService.registration(account)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

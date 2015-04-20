@@ -8,6 +8,8 @@ import java.util.Date;
 public class Account implements Cloneable{
     private  String username;
 
+    private String nickname;
+
     private String password;
 
     private String ip;
@@ -18,6 +20,10 @@ public class Account implements Cloneable{
 
     public String getUsername() {
         return username;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public String getPassword() {
@@ -38,6 +44,10 @@ public class Account implements Cloneable{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void setPassword(String password) {

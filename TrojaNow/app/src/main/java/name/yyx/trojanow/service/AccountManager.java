@@ -1,4 +1,4 @@
-package name.yyx.trojanow.service.impl;
+package name.yyx.trojanow.service;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -15,10 +15,10 @@ import name.yyx.trojanow.service.IAccount;
 /**
  * Created by dell on 2015/4/17.
  */
-public class AccountImpl implements IAccount{
+public class AccountManager implements IAccount{
 
-    private final static int STATUS_OK = 200;
-    private final static int STATUS_CREATED = 201;
+    private final static String STATUS_OK = "200";
+    private final static String STATUS_CREATED = "201";
 
     public Account signIn(Account account){
 
@@ -38,10 +38,10 @@ public class AccountImpl implements IAccount{
             response = httpAccessor.put(url + "account/signin", request);
 
             if (response == null){
-                Log.i("AccountImpl", "sign in error1");
+                Log.i("AccountImpl", "sign in HTTP error");
             }
 
-            if ((int)response.get("statusCode") == STATUS_OK){
+            if (response.get("statusCode").toString() == STATUS_OK){
                 Date time;
                 token = (String)response.get("token");
 //              timestamp = (long)response.get("timestamp");
@@ -50,7 +50,7 @@ public class AccountImpl implements IAccount{
 //              account.setTimestamp(time);
             }
             else{
-                Log.i("AccountImpl", "sign in error2");
+                Log.i("AccountImpl", "sign in wrong message");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -71,10 +71,36 @@ public class AccountImpl implements IAccount{
             response = httpAccessor.get(url + "account/signout", request);
 
             if(response == null){
-                Log.i("AccountImpl", "sign out error");
+                Log.i("AccountImpl", "sign out HTTP error");
             }
 
-            if((int)response.get("statusCode") == STATUS_OK){
+            if(response.get("statusCode").toString() == STATUS_OK){
+                return true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean registration(Account account){
+        String url = "http://trojanow.yyx.name:1234/";
+        JSONObject request = new JSONObject();
+        JSONObject response;
+
+        try {
+            request.put("user", account.getUsername());
+            request.put("password", account.getPassword());
+            request.put("nickname", account.getNickname());
+
+            HttpAccessor httpAccessor = new HttpAccessor();
+            response = httpAccessor.post(url + "account/reg",request);
+
+            if(response == null){
+                Log.i("AccountImpl", "register HTTP error");
+            }
+
+            if(response.get("statusCode").toString() == STATUS_CREATED){
                 return true;
             }
         } catch (JSONException e) {

@@ -29,9 +29,6 @@ import name.yyx.trojanow.entity.Account;
  */
 public class HttpAccessor {
 
-    public HttpAccessor(){
-    }
-
     public JSONObject post(String url, JSONObject request) {
 
         HttpClient client = new DefaultHttpClient();
@@ -133,6 +130,10 @@ public class HttpAccessor {
             e.printStackTrace();
         }
         return response;
+    }
+
+    public JSONObject delete(String url,JSONObject request){
+        return null;
     }
 
 }

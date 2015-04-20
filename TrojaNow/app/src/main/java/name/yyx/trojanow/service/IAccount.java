@@ -11,4 +11,6 @@ public interface IAccount {
 
     public boolean signOut(Account account);
 
+    public boolean registration(Account account);
+
 }

@@ -5,8 +5,11 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import name.yyx.trojanow.entity.Account;
+import name.yyx.trojanow.entity.Status;
 import name.yyx.trojanow.service.AccountManager;
 import name.yyx.trojanow.service.IAccount;
+import name.yyx.trojanow.service.IStatus;
+import name.yyx.trojanow.service.StatusManager;
 
 /**
  * Created by dell on 2015/4/17.
@@ -18,6 +21,10 @@ public class Controller extends Application{
     private Account account;
 
     private IAccount accountService;
+
+    private Status status;
+
+    private IStatus statusService;
 
     @Override
     public void onCreate() {
@@ -53,6 +60,8 @@ public class Controller extends Application{
         editor.remove("token");
         editor.commit();
     }
+
+/* ======================== account ============================*/
 
     public boolean signIn(String username, String password){
         accountService = new AccountManager();
@@ -110,6 +119,28 @@ public class Controller extends Application{
         account.setNickname(nickname);
 
         if(accountService.registration(account)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+/* ======================== status ============================*/
+
+    public boolean createStatus(String content, boolean isAnonymous, String temperature, String[] location){
+
+        status = new Status();
+        statusService = new StatusManager();
+
+        status.setAccount(account);
+        status.setContent(content);
+        status.setAnonymous(isAnonymous);
+        status.setTemperature(temperature);
+        status.setLocation(location);
+        status = statusService.create(status);
+
+        if(status.getId()!= null){
             return true;
         }
         else{

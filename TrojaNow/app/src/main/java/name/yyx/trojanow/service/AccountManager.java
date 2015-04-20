@@ -19,15 +19,16 @@ public class AccountManager implements IAccount{
 
     private final static String STATUS_OK = "200";
     private final static String STATUS_CREATED = "201";
+    private final static String URL = "http://trojanow.yyx.name:1234/";
 
     public Account signIn(Account account){
 
-        String url = "http://trojanow.yyx.name:1234/";
+
         JSONObject request = new JSONObject();
         JSONObject response;
 
         String token = null;
-        long timestamp = 0l;
+        Date timeStamp;
 
         try {
             request.put("user",account.getUsername());
@@ -35,19 +36,19 @@ public class AccountManager implements IAccount{
             request.put("ip", account.getIp());
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.put(url + "account/signin", request);
+            response = httpAccessor.put(URL + "account/signin", request);
 
             if (response == null){
                 Log.i("AccountImpl", "sign in HTTP error");
             }
 
-            if (response.get("statusCode").toString() == STATUS_OK){
-                Date time;
+            if (response.get("statusCode").toString().equals(STATUS_OK)){
+                long time = 0l;
                 token = (String)response.get("token");
-//              timestamp = (long)response.get("timestamp");
-//              time = new Date(timestamp);
+//              time = (long)response.get("timestamp");
+//              timeStamp = new Date(time);
                 account.setToken(token);
-//              account.setTimestamp(time);
+//              account.setTimestamp(timeStamp);
             }
             else{
                 Log.i("AccountImpl", "sign in wrong message");
@@ -59,7 +60,6 @@ public class AccountManager implements IAccount{
     }
 
     public boolean signOut(Account account){
-        String url = "http://trojanow.yyx.name:1234/";
         JSONObject request = new JSONObject();
         JSONObject response;
 
@@ -68,13 +68,13 @@ public class AccountManager implements IAccount{
             request.put("token", account.getToken());
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.get(url + "account/signout", request);
+            response = httpAccessor.get(URL + "account/signout", request);
 
             if(response == null){
                 Log.i("AccountImpl", "sign out HTTP error");
             }
 
-            if(response.get("statusCode").toString() == STATUS_OK){
+            if(response.get("statusCode").toString().equals(STATUS_OK)){
                 return true;
             }
         } catch (JSONException e) {
@@ -84,7 +84,6 @@ public class AccountManager implements IAccount{
     }
 
     public boolean registration(Account account){
-        String url = "http://trojanow.yyx.name:1234/";
         JSONObject request = new JSONObject();
         JSONObject response;
 
@@ -92,15 +91,16 @@ public class AccountManager implements IAccount{
             request.put("user", account.getUsername());
             request.put("password", account.getPassword());
             request.put("nickname", account.getNickname());
+            request.put("auth", false);
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.post(url + "account/reg",request);
+            response = httpAccessor.post(URL + "account/reg",request);
 
             if(response == null){
                 Log.i("AccountImpl", "register HTTP error");
             }
 
-            if(response.get("statusCode").toString() == STATUS_CREATED){
+            if(response.get("statusCode").toString().equals(STATUS_CREATED)){
                 return true;
             }
         } catch (JSONException e) {

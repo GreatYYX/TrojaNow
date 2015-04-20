@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.service.ISensor;
 import name.yyx.trojanow.service.Sensor;
 import name.yyx.trojanow.widget.ProgressCircle;
@@ -22,6 +23,7 @@ import name.yyx.trojanow.widget.ProgressCircle;
 
 public class NewStatusActivity extends ActionBarActivity {
     private static final String TAG = "NewStatusActivity";
+    private Controller controller;
     private ProgressCircle pCircle;
     private Sensor sensor;
     private EditText etStatus;
@@ -119,10 +121,10 @@ public class NewStatusActivity extends ActionBarActivity {
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
         // get content
-        String status = etStatus.getText().toString();
-        boolean isAnonymous = cbAnonymous.isChecked();
-        boolean hasLocation = cbLocation.isChecked();
-        boolean hasTemperature = cbTemperature.isChecked();
+        final String status = etStatus.getText().toString();
+        final boolean isAnonymous = cbAnonymous.isChecked();
+        final boolean hasLocation = cbLocation.isChecked();
+        final boolean hasTemperature = cbTemperature.isChecked();
 
         // invalid status
         if(status.equals("")) {
@@ -156,16 +158,11 @@ public class NewStatusActivity extends ActionBarActivity {
             @Override
             public void run() {
 
-                try {
-                    Thread.sleep(2000);
-                } catch(InterruptedException e){
-
+               if(controller.createStatus(status,isAnonymous, "" + temperature,location)) {
+                   new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
+                } else {
+                   new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
                 }
-//                if(controller post new status fail) {
-//                    new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
-//                } else {
-                    new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
-//                }
             }
         };
 

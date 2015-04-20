@@ -37,8 +37,18 @@ public class HttpAccessor {
         try {
             //set request header and body
             StringEntity stringEntity = new StringEntity(request.toString());
-            stringEntity.setContentType("application/json");
-            stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+
+            if(request.get("auth") == true){
+                HttpGet httpGet = new HttpGet(url);
+                Header[] headers = new Header[2];
+                headers[0] = new BasicHeader("Content-Type","application/json");
+                headers[1] = new BasicHeader("Authorization", request.getString("user") + ":" +request.getString("token"));
+                httpGet.setHeaders(headers);
+            }
+            else {
+                stringEntity.setContentType("application/json");
+                stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            }
 
             HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(stringEntity);

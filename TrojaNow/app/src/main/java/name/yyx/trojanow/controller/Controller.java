@@ -102,7 +102,6 @@ public class Controller extends Application{
         account = null;
         return true;
 //        if(accountService.signOut(account)){
-//            remove();
 //            account = null;
 //            return true;
 //        }

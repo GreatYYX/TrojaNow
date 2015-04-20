@@ -76,6 +76,12 @@ public class SigninActivity extends ActionBarActivity {
             }
         });
         btnRegister = (Button)findViewById(R.id.btn_register);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SigninActivity.this, RegisterActivity.class));
+            }
+        });
 
         // update UI
         handler = new MessageHandler();

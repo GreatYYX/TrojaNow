@@ -25,10 +25,11 @@ public class SettingActivity extends ActionBarActivity {
 //        setTheme(R.style.SettingTheme);
 
         // load setting fragment
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getFragmentManager().beginTransaction()
-            .replace(R.id.setting_fragment, new SettingFragment())
-            .commit();
+        // do not need to do it again for it has been linked in layout design
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getFragmentManager().beginTransaction()
+//            .replace(R.id.setting_fragment, new SettingFragment())
+//            .commit();
 
         pCircle = new ProgressCircle(SettingActivity.this);
         btnSignout = (Button)findViewById(R.id.btn_signout);
@@ -40,13 +41,9 @@ public class SettingActivity extends ActionBarActivity {
                     @Override
                     public void run() {
                         Controller controller = (Controller)getApplicationContext();
-                        if (controller.signOut()){
-                            startActivity(new Intent(SettingActivity.this, SigninActivity.class));
-                            finish();
-                        }
-                        else{
-                            Log.i("main activity", "log out error");
-                        }
+                        controller.signOut();
+                        startActivity(new Intent(SettingActivity.this, SigninActivity.class));
+                        finish();
                     }
                 };
                 new Thread(runnable).start();

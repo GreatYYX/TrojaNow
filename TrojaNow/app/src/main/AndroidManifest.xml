@@ -50,7 +50,7 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustResize" >
+            android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -78,6 +78,7 @@
             android:noHistory="true"
             android:windowSoftInputMode="stateVisible|adjustResize"
             android:parentActivityName=".SigninActivity" >
+            <!--android:windowSoftInputMode="stateVisible|adjustResize"-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="name.yyx.trojanow.SigninActivity" />

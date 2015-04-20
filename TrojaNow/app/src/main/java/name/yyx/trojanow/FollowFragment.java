@@ -6,42 +6,36 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.andraskindler.quickscroll.QuickScroll;
 import com.andraskindler.quickscroll.Scrollable;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FriendFragment extends Fragment {
+public class FollowFragment extends Fragment {
 
-    private FriendAdapter adapter;
+    private FollowAdapter adapter;
     private List<Map<String, Object>> data;
     private QuickScroll scroll;
     private EditText search;
     private ListView list;
 
-    public static FriendFragment newInstance() {
-        FriendFragment fragment = new FriendFragment();
+    public static FollowFragment newInstance() {
+        FollowFragment fragment = new FollowFragment();
         return fragment;
     }
 
-    public FriendFragment() {
+    public FollowFragment() {
         // Required empty public constructor
     }
 
@@ -75,14 +69,14 @@ public class FriendFragment extends Fragment {
             }
         }
 
-        adapter = new FriendAdapter(
-                getActivity(), data, R.layout.listview_item_friend,
+        adapter = new FollowAdapter(
+                getActivity(), data, R.layout.listview_item_follow,
                 new String[]{"user", "nickname"},
-                new int[]{R.id.friend_username, R.id.friend_nickname}
+                new int[]{R.id.follow_username, R.id.follow_nickname}
         );
 
-        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_friend, container, false);
-        list = (ListView)rootView.findViewById(R.id.list_friend);
+        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_follow, container, false);
+        list = (ListView)rootView.findViewById(R.id.list_follow);
         scroll = (QuickScroll)rootView.findViewById(R.id.quickscroll);
         search = (EditText)rootView.findViewById(R.id.et_search);
         list.setAdapter(adapter);
@@ -113,9 +107,9 @@ public class FriendFragment extends Fragment {
         return rootView;
     }
 
-    public class FriendAdapter extends SimpleAdapter implements Scrollable {
+    public class FollowAdapter extends SimpleAdapter implements Scrollable {
 
-        public FriendAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
+        public FollowAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
             super(context, data, resource, from, to);
         }
 

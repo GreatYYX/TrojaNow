@@ -8,13 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 
-import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.serverpush.IServerPush;
 import name.yyx.trojanow.serverpush.ServerPushManager;
 
@@ -83,10 +81,10 @@ public class MainActivity extends ActionBarActivity {
                 intent = new Intent(this, NewStatusActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_item_new_chat:
-                addNotificationDot(0);
-                break;
-            case R.id.menu_item_add_friend:
+//            case R.id.menu_item_new_chat:
+//                addNotificationDot(0);
+//                break;
+            case R.id.menu_item_add_follow:
                 removeNotificationDot(0);
                 break;
             case R.id.menu_item_settings:
@@ -113,9 +111,9 @@ public class MainActivity extends ActionBarActivity {
      */
     public class MainPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTitleProvider {
 
-        private int[] notificationState = {0, 0, 0};
+        private int[] notificationState = {0, 0};
         private final int[] ICON = {R.drawable.notification_dot_null, R.drawable.notification_dot};
-        private final String[] TITLE = {"Statuses", "Friends", "Chat"};
+        private final String[] TITLE = {"Statuses", "Follows"};
 
         public MainPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -142,8 +140,8 @@ public class MainActivity extends ActionBarActivity {
                 case 0:
                     return StatuesFragment.newInstance();
                 case 1:
-                    return FriendFragment.newInstance();
-                default:
+                    return FollowFragment.newInstance();
+                default: //not used
                     return BlankFragment.newInstance(TITLE[i]);
             }
         }

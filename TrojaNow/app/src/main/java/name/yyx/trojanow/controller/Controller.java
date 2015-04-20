@@ -86,14 +86,17 @@ public class Controller extends Application{
 
     public boolean signOut(){
         accountService = new AccountImpl();
-        if(accountService.signOut(account)){
-            remove();
-            account = null;
-            return true;
-        }
-        else{
-            return false;
-        }
+        accountService.signOut(account);
+        remove();
+        account = null;
+        return true;
+//        if(accountService.signOut(account)){
+//            account = null;
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
     }
 
 

@@ -18,6 +18,11 @@
             android:title="Remember password"
         />
 
+        <CheckBoxPreference
+            android:key="accept_anonymous"
+            android:title="Accept anonymous status"
+            />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

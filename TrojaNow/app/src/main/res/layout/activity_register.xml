@@ -14,6 +14,36 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/linearLayout">
 
+        <EditText
+            android:id="@+id/et_reg_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username"
+            android:textColorHint="#cccccc" />
+
+        <EditText
+            android:id="@+id/et_reg_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:password="true"
+            android:textColorHint="#cccccc"/>
+
+        <EditText
+            android:id="@+id/et_reg_pwd_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password_confirm"
+            android:password="true"
+            android:textColorHint="#cccccc"/>
+
+        <EditText
+            android:id="@+id/et_reg_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nickname"
+            android:textColorHint="#cccccc"/>
+
         <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
@@ -24,15 +54,6 @@
             style="@style/MyButton"
             android:clickable="true" />
 
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_margin="4dp"
-            android:text="Cancel"
-            style="@style/MyButton"
-            android:clickable="true" />
     </LinearLayout>
 
 </RelativeLayout>

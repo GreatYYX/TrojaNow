@@ -8,14 +8,14 @@
     android:paddingBottom="10dp"
     android:gravity="center_vertical">
 
-    <TextView android:id="@+id/friend_username"
+    <TextView android:id="@+id/follow_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/gray_dark"
         android:textSize="20sp"
         android:text="username"
         android:layout_marginRight="10dp" />
-    <TextView android:id="@+id/friend_nickname"
+    <TextView android:id="@+id/follow_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/gray_dark"

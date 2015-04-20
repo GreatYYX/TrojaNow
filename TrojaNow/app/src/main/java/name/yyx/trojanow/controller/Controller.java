@@ -97,15 +97,18 @@ public class Controller extends Application{
 
     public boolean signOut(){
         accountService = new AccountManager();
+        accountService.signOut(account);
         remove();
-        if(accountService.signOut(account)){
-            remove();
-            account = null;
-            return true;
-        }
-        else{
-            return false;
-        }
+        account = null;
+        return true;
+//        if(accountService.signOut(account)){
+//            remove();
+//            account = null;
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
     }
 
     public boolean registration(String username, String password, String nickname){
@@ -138,7 +141,7 @@ public class Controller extends Application{
         status.setLocation(location);
         status = statusService.create(status);
 
-        if(status.getId()!= null){
+        if(status.getDate() != null){
             return true;
         }
         else{

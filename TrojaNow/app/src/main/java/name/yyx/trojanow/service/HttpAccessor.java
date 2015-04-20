@@ -28,29 +28,30 @@ import name.yyx.trojanow.entity.Account;
  * Created by dell on 2015/4/11.
  */
 public class HttpAccessor {
-
     public JSONObject post(String url, JSONObject request) {
+        return post(url, request, null);
+    }
+
+    public JSONObject post(String url, JSONObject request, String auth) {
 
         HttpClient client = new DefaultHttpClient();
         JSONObject response = null;
 
         try {
             //set request header and body
+            HttpPost httpPost = new HttpPost(url);
             StringEntity stringEntity = new StringEntity(request.toString());
 
-            if(request.get("auth") == true){
-                HttpGet httpGet = new HttpGet(url);
+            if(auth != null){
                 Header[] headers = new Header[2];
-                headers[0] = new BasicHeader("Content-Type","application/json");
-                headers[1] = new BasicHeader("Authorization", request.getString("user") + ":" +request.getString("token"));
-                httpGet.setHeaders(headers);
+                Header header1 = new BasicHeader("Content-Type","application/json");
+                Header header2 = new BasicHeader("Authorization", auth);
+                headers[0] = header1;
+                headers[1] = header2;
+                httpPost.setHeaders(headers);
             }
-            else {
-                stringEntity.setContentType("application/json");
-                stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            }
-
-            HttpPost httpPost = new HttpPost(url);
+            stringEntity.setContentType("application/json");
+            stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             httpPost.setEntity(stringEntity);
 
             HttpResponse httpResponse = client.execute(httpPost);

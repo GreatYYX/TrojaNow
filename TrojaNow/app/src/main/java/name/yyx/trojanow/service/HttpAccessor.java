@@ -28,38 +28,45 @@ import name.yyx.trojanow.entity.Account;
  * Created by dell on 2015/4/11.
  */
 public class HttpAccessor {
-
     public JSONObject post(String url, JSONObject request) {
+        return post(url, request, null);
+    }
+
+    public JSONObject post(String url, JSONObject request, String auth) {
 
         HttpClient client = new DefaultHttpClient();
         JSONObject response = null;
 
         try {
             //set request header and body
+            HttpPost httpPost = new HttpPost(url);
             StringEntity stringEntity = new StringEntity(request.toString());
 
-            if(request.get("auth") == true){
-                HttpGet httpGet = new HttpGet(url);
+            if(auth != null){
                 Header[] headers = new Header[2];
-                headers[0] = new BasicHeader("Content-Type","application/json");
-                headers[1] = new BasicHeader("Authorization", request.getString("user") + ":" +request.getString("token"));
-                httpGet.setHeaders(headers);
+                Header header1 = new BasicHeader("Content-Type","application/json");
+                Header header2 = new BasicHeader("Authorization", auth);
+                headers[0] = header1;
+                headers[1] = header2;
+                httpPost.setHeaders(headers);
             }
-            else {
-                stringEntity.setContentType("application/json");
-                stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            }
-
-            HttpPost httpPost = new HttpPost(url);
+            stringEntity.setContentType("application/json");
+            stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             httpPost.setEntity(stringEntity);
 
             HttpResponse httpResponse = client.execute(httpPost);
-            StatusLine statusLine = httpResponse.getStatusLine();
             HttpEntity httpEntity = httpResponse.getEntity();
-            int statusCode = statusLine.getStatusCode();
             String respMsg = EntityUtils.toString(httpEntity);
+            StatusLine statusLine = httpResponse.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
 
-            response = new JSONObject(respMsg);
+
+            if(respMsg.equals("[]")){
+                response = new JSONObject();
+            }
+            else {
+                response = new JSONObject(respMsg);
+            }
             response.put("statusCode",statusCode);
             Log.i("respMsg", respMsg);
 
@@ -75,7 +82,7 @@ public class HttpAccessor {
         return response;
     }
 
-    public JSONObject get(String url, JSONObject request){
+    public JSONObject get(String url,String auth){
 
         HttpClient client = new DefaultHttpClient();
         JSONObject response = null;
@@ -84,16 +91,23 @@ public class HttpAccessor {
             HttpGet httpGet = new HttpGet(url);
             Header[] headers = new Header[2];
             Header header1 = new BasicHeader("Content-Type","application/json");
-            Header header2 = new BasicHeader("Authorization", request.getString("user") + ":" +request.getString("token"));
+            Header header2 = new BasicHeader("Authorization", auth);
             headers[0] = header1;
             headers[1] = header2;
             httpGet.setHeaders(headers);
 
             HttpResponse httpResponse = client.execute(httpGet);
+            HttpEntity httpEntity = httpResponse.getEntity();
+            String respMsg = EntityUtils.toString(httpEntity);
             StatusLine statusLine= httpResponse.getStatusLine();
             int statusCode = statusLine.getStatusCode();
 
-            response = new JSONObject();
+            if(respMsg.equals("[]")){
+                response = new JSONObject();
+            }
+            else {
+                response = new JSONObject(respMsg);
+            }
             response.put("statusCode", statusCode);
 
         } catch (JSONException e) {
@@ -107,26 +121,44 @@ public class HttpAccessor {
     }
 
     public JSONObject put(String url,JSONObject request){
+        return put(url,request, null);
+    }
+
+    public JSONObject put(String url,JSONObject request, String auth){
 
         HttpClient client = new DefaultHttpClient();
         JSONObject response = null;
 
         StringEntity stringEntity = null;
         try {
+            HttpPut httpPut = new HttpPut(url);
             stringEntity = new StringEntity(request.toString());
+
+            if(auth != null){
+                Header[] headers = new Header[2];
+                Header header1 = new BasicHeader("Content-Type","application/json");
+                Header header2 = new BasicHeader("Authorization", auth);
+                headers[0] = header1;
+                headers[1] = header2;
+                httpPut.setHeaders(headers);
+            }
             stringEntity.setContentType("application/json");
             stringEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-
-            HttpPut httpPut = new HttpPut(url);
             httpPut.setEntity(stringEntity);
 
             HttpResponse httpResponse = client.execute(httpPut);
-            StatusLine statusLine = httpResponse.getStatusLine();
             HttpEntity httpEntity = httpResponse.getEntity();
-            int statusCode = statusLine.getStatusCode();
             String respMsg = EntityUtils.toString(httpEntity);
+            StatusLine statusLine = httpResponse.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
 
-            response = new JSONObject(respMsg);
+
+            if(respMsg.equals("[]")){
+                response = new JSONObject();
+            }
+            else {
+                response = new JSONObject(respMsg);
+            }
             response.put("statusCode", statusCode);
             Log.i("respMsg", respMsg);
 

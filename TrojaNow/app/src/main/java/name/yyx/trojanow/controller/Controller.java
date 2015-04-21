@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import name.yyx.trojanow.entity.Account;
 import name.yyx.trojanow.entity.Status;
 import name.yyx.trojanow.service.AccountManager;
@@ -59,6 +63,10 @@ public class Controller extends Application{
         editor.remove("user");
         editor.remove("token");
         editor.commit();
+    }
+
+    public String getUsername(){
+        return account.getUsername();
     }
 
 /* ======================== account ============================*/
@@ -140,11 +148,17 @@ public class Controller extends Application{
         status.setLocation(location);
         status = statusService.create(status);
 
-        if(status.getId()!= null){
+        if(status.getDate() != null){
             return true;
         }
         else{
             return false;
         }
+    }
+
+    public List<Map<String, Object>> listStatus(){
+//        List<Status> statuses = new ArrayList<Status>();
+        statusService = new StatusManager();
+        return statusService.list(account);
     }
 }

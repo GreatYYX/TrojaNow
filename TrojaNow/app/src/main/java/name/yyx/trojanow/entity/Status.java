@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Status {
 
-    private Long id;
+    private int id;
 
     private Date date;
 
@@ -21,7 +21,7 @@ public class Status {
 
     private Account account;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -49,7 +49,7 @@ public class Status {
         return account;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -1,8 +1,6 @@
 package name.yyx.trojanow;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.DialogFragment;
@@ -19,6 +17,7 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.serverpush.IServerPush;
 import name.yyx.trojanow.serverpush.ServerPushManager;
 
@@ -27,17 +26,18 @@ public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = "MainActivity";
 
+    private Controller controller;
     private ViewPager viewpager;
     private PagerSlidingTabStrip strip;
     private MainPagerAdapter adapter;
     private ServerPushManager pushMgr;
-    private AddFollowDialog addFollowDlg;
     private NotificationManager notifMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        controller = (Controller)getApplicationContext();
 
         // page view
         adapter = new MainPagerAdapter(getSupportFragmentManager());
@@ -55,14 +55,12 @@ public class MainActivity extends ActionBarActivity {
         strip.setIndicatorColor(getResources().getColor(R.color.green_dark));
         strip.setBackgroundColor(getResources().getColor(R.color.green_light));
 
-        // add follow dialog
-        addFollowDlg = AddFollowDialog.newInstance();
-
         // notification manager
         notifMgr = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         // push notification manager
-        pushMgr = new ServerPushManager(getApplicationContext(), "yyx", new IServerPush() {
+        pushMgr = new ServerPushManager(getApplicationContext(), controller.getUsername(), new IServerPush() {
+
             @Override
             public void newStatus() {
                 addNotificationDot(0);
@@ -106,8 +104,8 @@ public class MainActivity extends ActionBarActivity {
 //                break;
             case R.id.menu_item_add_follow:
 //                showNotification(0, "message");//for test
-                DialogFragment newFragment = new AddFollowDialog();
-                newFragment.show(getSupportFragmentManager(), "add follow dlg");
+                DialogFragment dlg = new AddFollowDialogFragment();
+                dlg.show(getSupportFragmentManager(), "add follow dlg");
                 break;
             case R.id.menu_item_settings:
                 intent = new Intent(this, SettingActivity.class);

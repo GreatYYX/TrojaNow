@@ -3,8 +3,8 @@ package name.yyx.trojanow;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +17,21 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import name.yyx.trojanow.controller.Controller;
+import name.yyx.trojanow.widget.ProgressCircle;
 
 
 public class StatuesFragment extends Fragment {
 
+    private Controller controller;
     private SimpleAdapter adapter;
     private PullToRefreshListView pullToRefreshView;
     private List<Map<String, Object>> data;
+    private Handler handler;
+    private Runnable run;
 
     public static StatuesFragment newInstance() {
         return new StatuesFragment();
@@ -38,6 +43,7 @@ public class StatuesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        controller = (Controller)getActivity().getApplicationContext();
     }
 
     @Override
@@ -54,15 +60,16 @@ public class StatuesFragment extends Fragment {
         } else {
             // list content
             data = new ArrayList<Map<String, Object>>();
-            for (int i = 0; i < 20; i++) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("content", "abcdefgabcdefgabcdefgabcdefgabcdefgabcdefg");
-                map.put("author", "yyx");
-                map.put("date", "2015-04");
-                map.put("location", "10,200");
-                map.put("temperature", "9");
-                data.add(map);
-            }
+//            Date date = new Date(1429557153);
+//            for (int i = 0; i < 20; i++) {
+//                Map<String, Object> map = new HashMap<String, Object>();
+//                map.put("content", "abcdefgabcdefgabcdefgabcdefgabcdefgabcdefg");
+//                map.put("author", "yyx");
+//                map.put("date", date);
+//                map.put("location", "10,200");
+//                map.put("temperature", 9);
+//                data.add(map);
+//            }
         }
         adapter = new StatusAdapter(
                 getActivity(), data, R.layout.listview_item_status,
@@ -77,24 +84,27 @@ public class StatuesFragment extends Fragment {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 // Do work to refresh the list here.
-                new Handler().postDelayed(new Runnable() {
+                handler = new MessageHandler();
+                run = new Runnable() {
                     @Override
                     public void run() {
 
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("content", "newnewnew");
-                        map.put("author", "Great");
-                        map.put("date", "2015-09");
-                        map.put("location", null);
-                        map.put("temperature", null);
-
-                        data.add(0, map);
-                        adapter.notifyDataSetChanged();
-                        pullToRefreshView.requestLayout();
-                        pullToRefreshView.refreshDrawableState();
-                        pullToRefreshView.onRefreshComplete();
+//                        Map<String, Object> map = new HashMap<String, Object>();
+//                        map.put("content", "newnewnew");
+//                        map.put("author", "Great");
+//                        map.put("date", "2015-09");
+//                        map.put("location", "");
+//                        map.put("temperature", "");
+//
+//                        data.add(0, map);
+                        List<Map<String, Object>> statuses = controller.listStatus();
+                        for(int i = 0; i < statuses.size(); i++){
+                            data.add(statuses.get(i));
+                        }
+                        new Message().obtain(handler, ProgressCircle.END).sendToTarget();
                     }
-                }, 2000);
+                };
+                new Thread(run).start();
             }
         });
 
@@ -130,4 +140,20 @@ public class StatuesFragment extends Fragment {
         }
     }
 
+    class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case ProgressCircle.END:
+                    adapter.notifyDataSetChanged();
+//                    pullToRefreshView.requestLayout();
+                    pullToRefreshView.refreshDrawableState();
+                    pullToRefreshView.onRefreshComplete();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+            removeMessages(msg.what);
+        }
+    }
 }

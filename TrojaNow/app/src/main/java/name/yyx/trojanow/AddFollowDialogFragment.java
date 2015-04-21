@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import name.yyx.trojanow.widget.ProgressCircle;
 
-public class AddFollowDialog extends DialogFragment {
+public class AddFollowDialogFragment extends DialogFragment {
 
     private AlertDialog.Builder dlg;
     private Runnable run;
@@ -27,12 +27,12 @@ public class AddFollowDialog extends DialogFragment {
     private ProgressCircle pCircle;
     private EditText etFollow;
 
-    public AddFollowDialog() {
+    public AddFollowDialogFragment() {
         super();
     }
 
-    public static AddFollowDialog newInstance() {
-        return new AddFollowDialog();
+    public static AddFollowDialogFragment newInstance() {
+        return new AddFollowDialogFragment();
     }
 
     @NonNull
@@ -73,7 +73,7 @@ public class AddFollowDialog extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        AddFollowDialog.this.getDialog().cancel();
+                        AddFollowDialogFragment.this.getDialog().cancel();
                     }
                 });
         return dlg.create();

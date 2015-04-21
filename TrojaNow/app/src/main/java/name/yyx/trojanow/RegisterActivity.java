@@ -30,6 +30,7 @@ public class RegisterActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        controller = (Controller)getApplicationContext();
 
         etUser = (EditText)findViewById(R.id.et_reg_user);
         etPwd = (EditText)findViewById(R.id.et_reg_pwd);
@@ -41,10 +42,10 @@ public class RegisterActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                String user = etUser.getText().toString();
-                String pwd = etPwd.getText().toString();
+                final String user = etUser.getText().toString();
+                final String pwd = etPwd.getText().toString();
                 String pwdConfirm = etPwdConfirm.getText().toString();
-                String nickname = etNickname.getText().toString();
+                final String nickname = etNickname.getText().toString();
 
                 if(user.equals("") || pwd.equals("") || nickname.equals("")) {
                     Toast.makeText(RegisterActivity.this, "Invalid information!", Toast.LENGTH_SHORT).show();
@@ -60,11 +61,11 @@ public class RegisterActivity extends ActionBarActivity {
                 Runnable run = new Runnable() {
                     @Override
                     public void run() {
-//                        if(controller.register(user, pwd, nickname)) {
+                        if(controller.registration(user, pwd, nickname)) {
                             new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
-//                        } else {
-//                            new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
-//                        }
+                        } else {
+                            new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
+                        }
                     }
                 };
                 new Thread(run).start();

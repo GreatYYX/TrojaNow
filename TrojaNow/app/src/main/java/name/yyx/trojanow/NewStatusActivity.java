@@ -41,6 +41,7 @@ public class NewStatusActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_status);
+        controller = (Controller)getApplicationContext();
 
         etStatus = (EditText)findViewById(R.id.et_status);
         cbAnonymous = (CheckBox)findViewById(R.id.cb_anonymous);
@@ -157,12 +158,19 @@ public class NewStatusActivity extends ActionBarActivity {
         run = new Runnable() {
             @Override
             public void run() {
+                boolean isSuccess = false;
+                if(hasTemperature && hasLocation){
+                    isSuccess = controller.createStatus(status, isAnonymous, Integer.toString(temperature), location);
+                }
+                else if(!hasTemperature){
+                    isSuccess = controller.createStatus(status, isAnonymous, null, location);
+                }
 
-               if(controller.createStatus(status,isAnonymous,Integer.toString(temperature),location)) {
-                   new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
-               } else {
+               if(isSuccess) {
                    new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
-               }
+                } else {
+                   new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
+                }
             }
         };
 

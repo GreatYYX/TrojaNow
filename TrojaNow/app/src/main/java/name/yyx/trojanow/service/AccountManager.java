@@ -27,9 +27,6 @@ public class AccountManager implements IAccount{
         JSONObject request = new JSONObject();
         JSONObject response;
 
-        String token = null;
-        Date timeStamp;
-
         try {
             request.put("user",account.getUsername());
             request.put("password", account.getPassword());
@@ -43,12 +40,11 @@ public class AccountManager implements IAccount{
             }
 
             if (response.get("statusCode").toString().equals(STATUS_OK)){
-                long time = 0l;
-                token = (String)response.get("token");
-//              time = (long)response.get("timestamp");
-//              timeStamp = new Date(time);
+//                long time = Long.parseLong(response.get("timestamp").toString());
+//                Date timeStamp = new Date(time);
+                String token = (String)response.get("token");
                 account.setToken(token);
-//              account.setTimestamp(timeStamp);
+//                account.setTimestamp(timeStamp);
             }
             else{
                 Log.i("AccountImpl", "sign in wrong message");
@@ -60,15 +56,13 @@ public class AccountManager implements IAccount{
     }
 
     public boolean signOut(Account account){
-        JSONObject request = new JSONObject();
         JSONObject response;
 
         try {
-            request.put("user", account.getUsername());
-            request.put("token", account.getToken());
+            String auth = account.getUsername() + ":" + account.getToken();
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.get(URL + "account/signout", request);
+            response = httpAccessor.get(URL + "account/signout", auth);
 
             if(response == null){
                 Log.i("AccountImpl", "sign out HTTP error");
@@ -91,7 +85,6 @@ public class AccountManager implements IAccount{
             request.put("user", account.getUsername());
             request.put("password", account.getPassword());
             request.put("nickname", account.getNickname());
-            request.put("auth", false);
 
             HttpAccessor httpAccessor = new HttpAccessor();
             response = httpAccessor.post(URL + "account/reg",request);

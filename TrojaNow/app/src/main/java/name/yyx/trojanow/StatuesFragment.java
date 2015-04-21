@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,11 +85,12 @@ public class StatuesFragment extends Fragment {
                         map.put("content", "newnewnew");
                         map.put("author", "Great");
                         map.put("date", "2015-09");
-                        map.put("location", "");
-                        map.put("temperature", "");
+                        map.put("location", null);
+                        map.put("temperature", null);
 
                         data.add(0, map);
                         adapter.notifyDataSetChanged();
+                        pullToRefreshView.requestLayout();
                         pullToRefreshView.refreshDrawableState();
                         pullToRefreshView.onRefreshComplete();
                     }
@@ -109,14 +111,19 @@ public class StatuesFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // delete icon if location or temperature not exists
             View view = super.getView(position, convertView, parent);
             TextView location = (TextView)view.findViewById(R.id.status_location);
             TextView temperature = (TextView)view.findViewById(R.id.status_temperature);
-            if(location.getText().toString().equals("")) {
+
+            // reset location and temperature icon to fix view refresh bug
+            location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.list_location, 0, 0, 0);
+            temperature.setCompoundDrawablesWithIntrinsicBounds(R.drawable.list_temperature, 0, 0, 0);
+
+            // delete icon if location or temperature not exists
+            if(data.get(position).get("location") == null) {
                 location.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
-            if(temperature.getText().toString().equals("")) {
+            if(data.get(position).get("temperature") == null) {
                 temperature.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             return view;

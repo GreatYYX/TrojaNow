@@ -69,6 +69,10 @@ public class ServerPushManager {
                 if(type.equals("NEW_STATUS")) {
                     callback.newStatus();
                 }
+                else if(type.equals("NEW_FOLLOW")) {
+                    String user = serviceMsg.getString("user");
+                    callback.newFollow(user);
+                }
             } catch(JSONException e) {
                 e.printStackTrace();
             }

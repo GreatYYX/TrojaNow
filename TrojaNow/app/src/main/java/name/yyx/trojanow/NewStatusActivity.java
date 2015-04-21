@@ -158,11 +158,11 @@ public class NewStatusActivity extends ActionBarActivity {
             @Override
             public void run() {
 
-               if(controller.createStatus(status,isAnonymous, "" + temperature,location)) {
+               if(controller.createStatus(status,isAnonymous,Integer.toString(temperature),location)) {
                    new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
-                } else {
+               } else {
                    new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
-                }
+               }
             }
         };
 

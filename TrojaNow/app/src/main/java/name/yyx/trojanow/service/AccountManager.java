@@ -56,15 +56,13 @@ public class AccountManager implements IAccount{
     }
 
     public boolean signOut(Account account){
-        JSONObject request = new JSONObject();
         JSONObject response;
 
         try {
-            request.put("user", account.getUsername());
-            request.put("token", account.getToken());
+            String auth = account.getUsername() + ":" + account.getToken();
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.get(URL + "account/signout", request);
+            response = httpAccessor.get(URL + "account/signout", auth);
 
             if(response == null){
                 Log.i("AccountImpl", "sign out HTTP error");
@@ -101,7 +99,6 @@ public class AccountManager implements IAccount{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i("mnb", "cao");
         return false;
     }
 

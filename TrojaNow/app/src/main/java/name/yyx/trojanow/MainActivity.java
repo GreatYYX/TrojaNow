@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.serverpush.IServerPush;
 import name.yyx.trojanow.serverpush.ServerPushManager;
 
@@ -21,6 +22,7 @@ public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = "MainActivity";
 
+    private Controller controller;
     private ViewPager viewpager;
     private PagerSlidingTabStrip strip;
     private MainPagerAdapter adapter;
@@ -30,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        controller = (Controller)getApplicationContext();
 
         // page view
         adapter = new MainPagerAdapter(getSupportFragmentManager());
@@ -47,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
         strip.setIndicatorColor(getResources().getColor(R.color.green_dark));
         strip.setBackgroundColor(getResources().getColor(R.color.green_light));
 
-        pushMgr = new ServerPushManager(getApplicationContext(), "yyx", new IServerPush() {
+        pushMgr = new ServerPushManager(getApplicationContext(), controller.getUsername(), new IServerPush() {
             @Override
             public void newStatus() {
                 addNotificationDot(0);

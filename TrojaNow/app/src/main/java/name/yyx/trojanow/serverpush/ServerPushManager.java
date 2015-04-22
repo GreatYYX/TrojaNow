@@ -15,7 +15,7 @@ public class ServerPushManager {
 
     private Context ctx;
     private String user;
-    private IServerPush callback;
+    private IServerPush listener;
     private ServiceReceiver recv;
 
     public ServerPushManager(Context ctx, String user) {
@@ -28,9 +28,9 @@ public class ServerPushManager {
         ctx.registerReceiver(recv, filter);
     }
 
-    public ServerPushManager(Context ctx, String user, IServerPush callback) {
+    public ServerPushManager(Context ctx, String user, IServerPush listener) {
         this(ctx, user);
-        this.callback = callback;
+        this.listener = listener;
     }
 
     public void start() {
@@ -67,11 +67,11 @@ public class ServerPushManager {
                 JSONObject serviceMsg = new JSONObject(data);
                 String type = serviceMsg.getString("type");
                 if(type.equals("NEW_STATUS")) {
-                    callback.newStatus();
+                    listener.newStatus();
                 }
                 else if(type.equals("NEW_FOLLOW")) {
                     String user = serviceMsg.getString("user");
-                    callback.newFollow(user);
+                    listener.newFollow(user);
                 }
             } catch(JSONException e) {
                 e.printStackTrace();

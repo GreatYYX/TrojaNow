@@ -146,11 +146,13 @@ public class NewStatusActivity extends ActionBarActivity {
                     pCircle.dismiss();
                     Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
                 }
+                sensor.removeListener();
             }
             @Override
             public void onFail() {
                 pCircle.dismiss();
                 Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
+                sensor.removeListener();
             }
         });
 

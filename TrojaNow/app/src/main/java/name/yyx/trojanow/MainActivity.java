@@ -1,12 +1,14 @@
 package name.yyx.trojanow;
 
+import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
     private PagerSlidingTabStrip strip;
     private MainPagerAdapter adapter;
     private ServerPushManager pushMgr;
+    private NotificationManager notifMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +56,21 @@ public class MainActivity extends ActionBarActivity {
         strip.setIndicatorColor(getResources().getColor(R.color.green_dark));
         strip.setBackgroundColor(getResources().getColor(R.color.green_light));
 
+        // notification manager
+        notifMgr = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+        // push notification manager
         pushMgr = new ServerPushManager(getApplicationContext(), controller.getUsername(), new IServerPush() {
+
             @Override
             public void newStatus() {
                 addNotificationDot(0);
+            }
+            @Override
+            public void newFollow(String user) {
+                String msg = user + " follows you!";
+                int id = 0;
+                showNotification(id, msg);
             }
         });
 //        pushMgr.start();
@@ -89,10 +103,11 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
                 break;
 //            case R.id.menu_item_new_chat:
-//                addNotificationDot(0);
 //                break;
             case R.id.menu_item_add_follow:
-                removeNotificationDot(0);
+//                showNotification(0, "message");//for test
+                DialogFragment dlg = new AddFollowDialogFragment();
+                dlg.show(getSupportFragmentManager(), "add follow dlg");
                 break;
             case R.id.menu_item_settings:
                 intent = new Intent(this, SettingActivity.class);
@@ -111,6 +126,29 @@ public class MainActivity extends ActionBarActivity {
     public void removeNotificationDot(int position) {
         adapter.removeNotificationDot(position);
         strip.notifyDataSetChanged();
+    }
+
+    public void showNotification(int id, String msg) {
+
+        NotificationCompat.Builder mBuilder;
+        mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(msg);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(MainActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+//        stackBuilder.addNextIntent(intent);
+//        PendingIntent resultPendingIntent =
+//                stackBuilder.getPendingIntent(
+//                        0,
+//                        PendingIntent.FLAG_UPDATE_CURRENT
+//                );
+//        mBuilder.setContentIntent(resultPendingIntent);
+        notifMgr.notify(id, mBuilder.build());
     }
 
     /**

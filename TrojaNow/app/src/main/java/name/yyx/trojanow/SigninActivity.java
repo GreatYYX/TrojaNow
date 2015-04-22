@@ -96,6 +96,11 @@ public class SigninActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+    }
+
     class MessageHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {

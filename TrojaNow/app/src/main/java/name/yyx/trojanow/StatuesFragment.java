@@ -5,22 +5,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +32,7 @@ public class StatuesFragment extends Fragment {
     private List<Map<String, Object>> data;
     private Handler handler;
     private Runnable run;
-    private boolean wantAnonymous;
+    private boolean acceptAnonymous;
 
     public static StatuesFragment newInstance() {
         return new StatuesFragment();
@@ -79,25 +75,17 @@ public class StatuesFragment extends Fragment {
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 // Do work to refresh the list here.
 
-                wantAnonymous = controller.readAccept(getActivity());
+                acceptAnonymous = controller.readAccept(getActivity());
                 handler = new MessageHandler();
                 run = new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("123", "123");
-//                        Map<String, Object> map = new HashMap<String, Object>();
-//                        map.put("content", "newnewnew");
-//                        map.put("author", "Great");
-//                        map.put("date", "2015-09");
-//                        map.put("location", "");
-//                        map.put("temperature", "");
-//                        data.add(0, map);
-
-                        List<Map<String, Object>> statuses = controller.listStatus(wantAnonymous);
+                        //list status
+                        List<Map<String, Object>> statuses = controller.listStatus(acceptAnonymous);
                         for(int i = 0; i < statuses.size(); i++){
                             data.add(statuses.get(i));
                         }
-                        new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
+                        new Message().obtain(handler, ProgressCircle.END).sendToTarget();
                     }
                 };
                 new Thread(run).start();
@@ -117,14 +105,19 @@ public class StatuesFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // delete icon if location or temperature not exists
             View view = super.getView(position, convertView, parent);
             TextView location = (TextView)view.findViewById(R.id.status_location);
             TextView temperature = (TextView)view.findViewById(R.id.status_temperature);
-            if(location.getText().toString().equals("")) {
+
+            // reset location and temperature icon to fix view refresh bug
+            location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.list_location, 0, 0, 0);
+            temperature.setCompoundDrawablesWithIntrinsicBounds(R.drawable.list_temperature, 0, 0, 0);
+
+            // delete icon if location or temperature not exists
+            if(data.get(position).get("location") == null) {
                 location.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
-            if(temperature.getText().toString().equals("")) {
+            if(data.get(position).get("temperature") == null) {
                 temperature.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             return view;
@@ -135,18 +128,15 @@ public class StatuesFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what) {
-                case ProgressCircle.SUCCESS:
+                case ProgressCircle.END:
                     adapter.notifyDataSetChanged();
+//                    pullToRefreshView.requestLayout();
                     pullToRefreshView.refreshDrawableState();
                     pullToRefreshView.onRefreshComplete();
                     break;
-//                case ProgressCircle.ERROR:
-//                    Toast.makeText(NewStatusActivity.this, "Post failed!", Toast.LENGTH_SHORT).show();
-//                    break;
                 default:
                     super.handleMessage(msg);
             }
-//            pCircle.dismiss();
             removeMessages(msg.what);
         }
     }

@@ -155,45 +155,21 @@ Response: OK
 		]
 	}
 
-In request, type is optional, default value is unconstrained.
+In request, type is optional, default value is unconstrained (to anonymous).
 Server will return at most 20 statuses once.
 
-## GET /chat/:friend
-
-Request:
-	
-	AUTH
-
-Response: OK
-
-	{
-    	"ip": @string
-	}
-
-
-## POST /friends
+## POST /follows
 
 Request:
 
 	AUTH
     {
-		"friend": @string
+		"follow": @string
     }
 
-Response: OK
+Response: CREATED
 
-## PUT /friends/:friend
-
-Request:
-
-	AUTH
-	{
-		"accept": @bool
-	}
-
-This is for accepting new friend request or not.
-
-## GET /friends
+## GET /follows
 
 Request:
 
@@ -202,7 +178,7 @@ Request:
 Response: OK
 
 	{
-		"friends": [
+		"follows": [
 			@string,
 			@string,
 			...,
@@ -210,7 +186,7 @@ Response: OK
 		]
 	}
 
-## DELETE /friends/:id
+## DELETE /follows/:id
 
 Request:
 
@@ -234,32 +210,11 @@ Response: OK
 
 Server will push back notifications to client by MQTT protocol. Client should also connect to MQTT server when signing in.
 
-## New friend request
-
-	{
-		"type": "NEW_FRIEND",
-		"data": {
-			"user": @string
-		}
-	}
-
-## Accepted new friend request
+## New follow
 	
 	{
-		"type": "NEW_FRIEND_ACCEPT",
-		"data": {
-			"user": @string,
-			"nickname": @string
-		}
-	}
-
-## Rejected new friend request
-	
-	{
-		"type": "NEW_FRIEND_REJECT",
-		"data": {
-			"user": @string
-		}
+		"type": "NEW_FOLLOW",
+		"user": @string
 	}
 
 ## New status available

@@ -161,10 +161,10 @@ public class NewStatusActivity extends ActionBarActivity {
 
                 boolean isSuccess = false;
                 if(hasTemperature && hasLocation){
-                    isSuccess = controller.createStatus(status,isAnonymous, Integer.toString(temperature),location);
+                    isSuccess = controller.createStatus(status, isAnonymous, Integer.toString(temperature), location);
                 }
                 else if(!hasTemperature){
-                    isSuccess = controller.createStatus(status,isAnonymous, null,location);
+                    isSuccess = controller.createStatus(status, isAnonymous, null, location);
                 }
 
                if(isSuccess) {

@@ -1,7 +1,9 @@
 package name.yyx.trojanow.controller;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -63,6 +65,12 @@ public class Controller extends Application{
         editor.remove("user");
         editor.remove("token");
         editor.commit();
+    }
+
+    public boolean readAccept(Context context){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean accept_anonymous = sharedPref.getBoolean("accept_anonymous",false);
+        return accept_anonymous;
     }
 
     public String getUsername(){
@@ -156,9 +164,9 @@ public class Controller extends Application{
         }
     }
 
-    public List<Map<String, Object>> listStatus(){
+    public List<Map<String, Object>> listStatus(boolean wantAnonymous){
 //        List<Status> statuses = new ArrayList<Status>();
         statusService = new StatusManager();
-        return statusService.list(account);
+        return statusService.list(account, wantAnonymous);
     }
 }

@@ -36,6 +36,7 @@ public class StatuesFragment extends Fragment {
     private List<Map<String, Object>> data;
     private Handler handler;
     private Runnable run;
+    private boolean wantAnonymous;
 
     public static StatuesFragment newInstance() {
         return new StatuesFragment();
@@ -62,18 +63,7 @@ public class StatuesFragment extends Fragment {
         if (savedInstanceState != null) {
             data = (List<Map<String, Object>>) savedInstanceState.getSerializable("data");
         } else {
-            // list content
             data = new ArrayList<Map<String, Object>>();
-//            Date date = new Date(1429557153);
-//            for (int i = 0; i < 20; i++) {
-//                Map<String, Object> map = new HashMap<String, Object>();
-//                map.put("content", "abcdefgabcdefgabcdefgabcdefgabcdefgabcdefg");
-//                map.put("author", "yyx");
-//                map.put("date", date);
-//                map.put("location", "10,200");
-//                map.put("temperature", 9);
-//                data.add(map);
-//            }
         }
         adapter = new StatusAdapter(
                 getActivity(), data, R.layout.listview_item_status,
@@ -88,19 +78,22 @@ public class StatuesFragment extends Fragment {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 // Do work to refresh the list here.
+
+                wantAnonymous = controller.readAccept(getActivity());
                 handler = new MessageHandler();
                 run = new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("123", "123");
 //                        Map<String, Object> map = new HashMap<String, Object>();
 //                        map.put("content", "newnewnew");
 //                        map.put("author", "Great");
 //                        map.put("date", "2015-09");
 //                        map.put("location", "");
 //                        map.put("temperature", "");
-//
 //                        data.add(0, map);
-                        List<Map<String, Object>> statuses = controller.listStatus();
+
+                        List<Map<String, Object>> statuses = controller.listStatus(wantAnonymous);
                         for(int i = 0; i < statuses.size(); i++){
                             data.add(statuses.get(i));
                         }

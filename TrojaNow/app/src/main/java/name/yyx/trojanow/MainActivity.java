@@ -1,13 +1,16 @@
 package name.yyx.trojanow;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -57,6 +60,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 //        pushMgr.start();
+
     }
 
     @Override

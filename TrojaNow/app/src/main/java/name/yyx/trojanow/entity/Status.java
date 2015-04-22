@@ -17,7 +17,7 @@ public class Status {
 
     private String temperature;
 
-    private String[] location;
+    private float[] location;
 
     private Account account;
 
@@ -41,7 +41,7 @@ public class Status {
         return temperature;
     }
 
-    public String[] getLocation() {
+    public float[] getLocation() {
         return location;
     }
 
@@ -69,7 +69,7 @@ public class Status {
         this.temperature = temperature;
     }
 
-    public void setLocation(String[] location) {
+    public void setLocation(float[] location) {
         this.location = location;
     }
 

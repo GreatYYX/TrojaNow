@@ -7,13 +7,16 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import name.yyx.trojanow.entity.Account;
 import name.yyx.trojanow.entity.Status;
 import name.yyx.trojanow.service.AccountManager;
+import name.yyx.trojanow.service.FollowManager;
 import name.yyx.trojanow.service.IAccount;
+import name.yyx.trojanow.service.IFollow;
 import name.yyx.trojanow.service.IStatus;
 import name.yyx.trojanow.service.StatusManager;
 
@@ -31,6 +34,8 @@ public class Controller extends Application{
     private Status status;
 
     private IStatus statusService;
+
+    private IFollow followService;
 
     @Override
     public void onCreate() {
@@ -87,11 +92,12 @@ public class Controller extends Application{
         account.setUsername(username);
         account.setPassword(password);
         account.setIp("");
-        account =  accountService.signIn(account);
+
+        Account user = accountService.signIn(account);
+        account.setToken(user.getToken());
 
         if (account.getToken() != null){
             write();
-            Log.i("Controller", account.getToken());
             return true;
         }
         else{
@@ -153,10 +159,18 @@ public class Controller extends Application{
         status.setContent(content);
         status.setAnonymous(isAnonymous);
         status.setTemperature(temperature);
-        status.setLocation(location);
-        status = statusService.create(status);
+        float[] loc = null;
+        if(location != null) {
+            loc = new float[]{Float.parseFloat(location[0]), Float.parseFloat(location[1])};
+        }
+        status.setLocation(loc);
 
-        if(status.getDate() != null){
+        Status result = statusService.create(status);
+        status.setId(result.getId());
+        status.setDate(result.getDate());
+        Date d = status.getDate();
+
+        if(status.getId() != 0){
             return true;
         }
         else{
@@ -164,9 +178,28 @@ public class Controller extends Application{
         }
     }
 
-    public List<Map<String, Object>> listStatus(boolean wantAnonymous){
-//        List<Status> statuses = new ArrayList<Status>();
+    public List<Map<String, Object>> listStatuses(boolean wantAnonymous){
         statusService = new StatusManager();
         return statusService.list(account, wantAnonymous);
     }
+
+/* ======================== friend ============================*/
+
+    public boolean follow(String followee){
+        followService = new FollowManager();
+        if(followService.follow(account, followee)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public List<Map<String, Object>> listFollowees(){
+        followService = new FollowManager();
+        return followService.listFollowees(account);
+    }
+
 }
+
+

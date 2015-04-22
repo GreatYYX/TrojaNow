@@ -2,6 +2,7 @@ package name.yyx.trojanow;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,13 +23,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import name.yyx.trojanow.controller.Controller;
+
 public class FollowFragment extends Fragment {
 
+    private Controller controller;
     private FollowAdapter adapter;
     private List<Map<String, Object>> data;
     private QuickScroll scroll;
     private EditText search;
     private ListView list;
+    private Handler handler;
+    private Runnable run;
 
     public static FollowFragment newInstance() {
         FollowFragment fragment = new FollowFragment();
@@ -42,6 +48,7 @@ public class FollowFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        controller = (Controller)getActivity().getApplicationContext();
 
     }
 
@@ -55,10 +62,10 @@ public class FollowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         if (savedInstanceState != null) {
             data = (List<Map<String, Object>>) savedInstanceState.getSerializable("data");
         } else {
-            // list content
             data = new ArrayList<Map<String, Object>>();
             String[] author = {"an","an","an","an","an","yao", "yao","yao","yao","yao","zhang","zhang","zhang","zhang","zhang"};
             for (int i = 0; i < 15; i++) {
@@ -68,7 +75,6 @@ public class FollowFragment extends Fragment {
                 data.add(map);
             }
         }
-
         adapter = new FollowAdapter(
                 getActivity(), data, R.layout.listview_item_follow,
                 new String[]{"user", "nickname"},
@@ -80,6 +86,23 @@ public class FollowFragment extends Fragment {
         scroll = (QuickScroll)rootView.findViewById(R.id.quickscroll);
         search = (EditText)rootView.findViewById(R.id.et_search);
         list.setAdapter(adapter);
+
+        //list content
+
+
+
+//        run = new Runnable() {
+//            @Override
+//            public void run() {
+////            data.clear();
+//                List<Map<String, Object>> followers = new ArrayList<Map<String, Object>>();
+//                for(int i = 0; i < followers.size(); i++){
+//                    data.add(followers.get(i));
+//                }
+//
+//            }
+//        };
+//        new Thread(run).start();
 
         scroll.init(QuickScroll.TYPE_INDICATOR_WITH_HANDLE, list, adapter, QuickScroll.STYLE_HOLO);
         scroll.setFixedSize(1);

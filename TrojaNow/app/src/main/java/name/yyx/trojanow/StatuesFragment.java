@@ -81,7 +81,8 @@ public class StatuesFragment extends Fragment {
                     @Override
                     public void run() {
                         //list status
-                        List<Map<String, Object>> statuses = controller.listStatus(acceptAnonymous);
+                        data.clear();
+                        List<Map<String, Object>> statuses = controller.listStatuses(acceptAnonymous);
                         for(int i = 0; i < statuses.size(); i++){
                             data.add(statuses.get(i));
                         }

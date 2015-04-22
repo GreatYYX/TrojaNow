@@ -16,10 +16,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.widget.ProgressCircle;
 
 public class AddFollowDialogFragment extends DialogFragment {
 
+    private Controller controller;
     private AlertDialog.Builder dlg;
     private Runnable run;
     private Context ctx;
@@ -42,6 +44,7 @@ public class AddFollowDialogFragment extends DialogFragment {
         ctx = getActivity();
         etFollow = new EditText(ctx);
         pCircle = new ProgressCircle(ctx);
+        controller = (Controller)getActivity().getApplicationContext();
 
         dlg = new AlertDialog.Builder(ctx)
                 .setTitle("Please enter a user you want to follow:")
@@ -56,15 +59,12 @@ public class AddFollowDialogFragment extends DialogFragment {
                             @Override
                             public void run() {
                                 String follow = etFollow.getText().toString();
+                                if(controller.follow(follow)){
+                                    new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
 
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (Exception e) {
-
+                                }else{
+                                    Log.i("addFollowDialog", "controller error");
                                 }
-
-                                Log.i("addfollow", "send");
-                                new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
                             }
                         };
                         new Thread(run).start();

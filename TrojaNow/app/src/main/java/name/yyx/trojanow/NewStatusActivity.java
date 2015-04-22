@@ -50,7 +50,7 @@ public class NewStatusActivity extends ActionBarActivity {
         cbTemperature = (CheckBox)findViewById(R.id.cb_temperature);
         flag = 0;
 
-        // bundle anonymous checkbox with location checkbox
+        // bind anonymous checkbox with location checkbox
         cbAnonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             boolean location_checked;
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -148,11 +148,13 @@ public class NewStatusActivity extends ActionBarActivity {
                     pCircle.dismiss();
                     Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
                 }
+                sensor.removeListener();
             }
             @Override
             public void onFail() {
                 pCircle.dismiss();
                 Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
+                sensor.removeListener();
             }
         });
 

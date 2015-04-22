@@ -93,6 +93,7 @@ public class StatuesFragment extends Fragment {
             }
         });
 
+        // auto refresh
         pullToRefreshView.setRefreshing();
 
         return rootView;

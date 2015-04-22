@@ -30,7 +30,7 @@ References:
 
 All of the Resource URLs and METHOD with it are explained below, including request body & response body with correct status code.
 
-If error occurs, status code will be set, response body will be:
+If error occurs, `status code` will be set, response body will be:
 
 	{
 		"error": @string(message)
@@ -38,7 +38,7 @@ If error occurs, status code will be set, response body will be:
 
 If the request needs authorization, the header should include a `Authorization` field (noted as `AUTH` below). The value of this field is `user:token`.
 
-Remember aLL of users' input should be filtered both on client and server for avoiding SQL injection or CSRF.
+Remember all of users' input should be filtered both on client and server for avoiding SQL injection or CSRF.
 
 ## POST /test
 
@@ -112,14 +112,14 @@ Request:
 		"content": @string,
 		"anonymous": @bool,
 		"temperature": @string(unit in centigrade) | null,
-		"location": [@int(latitude), @int(longitude)] | null
+		"location": [@number(latitude), @number(longitude)] | null
     }
 
 Response: CREATED
 
 	{
-		"id": @int
-		"date": @int
+		"id": @number
+		"date": @number(UNIX timestamp)
 	}
 
 ## DELETE /statuses/:id
@@ -142,13 +142,14 @@ Response: OK
 		"next_cursor": @int(not support yet),
 		"statuses": [
 			{
-				"id": @int,
+				"id": @number,
 		    	"author": @string,
 		    	"author_nickname": @string,
 				"content": @string,
+				"anonymous": @bool,
 				"date": @string(UNIX timestamp),
 				"temperature": @string | null,
-				"location": [@int(latitude), @int(longitude)] | null
+				"location": [@number(latitude), @number(longitude)] | null
 		    },
 			{...},
 			{...}
@@ -157,6 +158,7 @@ Response: OK
 
 In request, type is optional, default value is unconstrained (to anonymous).
 Server will return at most 20 statuses once.
+If no statues, the value of field "statuses" will be an empty array.
 
 ## POST /follows
 
@@ -179,10 +181,12 @@ Response: OK
 
 	{
 		"follows": [
-			@string,
-			@string,
-			...,
-			@string
+			{
+				"user": @string,
+				"nickname": @string
+			},
+			{...},
+			{...}
 		]
 	}
 
@@ -194,17 +198,7 @@ Request:
 
 Response: OK
 
-## PUT /sessions
-
-Request:
-
-	AUTH
-    {
-		"location": [@int, @int],
-		"temperature": @string
-    }
-
-Response: OK
+If no follow, the value of field "follows" will be an empty array.
 
 # Server Pushed Notification
 

@@ -12,7 +12,7 @@ public class Sensor implements YahooWeatherInfoListener, YahooWeatherExceptionLi
     private WeatherInfo weatherInfo = null;
     private boolean getInfo;
     private Context ctx;
-    private ISensor callback = null;
+    private ISensor listener = null;
 
     public Sensor(Context ctx) {
         getInfo = false;
@@ -22,35 +22,34 @@ public class Sensor implements YahooWeatherInfoListener, YahooWeatherExceptionLi
         mYahooWeather.setNeedDownloadIcons(true);
         mYahooWeather.setUnit(YahooWeather.UNIT.CELSIUS);
         mYahooWeather.setSearchMode(YahooWeather.SEARCH_MODE.GPS);
-//        mYahooWeather.queryYahooWeatherByGPS(ctx, this);
     }
 
-    public Sensor(Context ctx, ISensor callback) {
+    public Sensor(Context ctx, ISensor listener) {
         this(ctx);
-        this.callback = callback;
+        this.listener = listener;
     }
 
     @Override
     public void onFailConnection(Exception e) {
         getInfo = false;
-        if(callback != null) {
-            callback.onFail();
+        if(listener != null) {
+            listener.onFail();
         }
     }
 
     @Override
     public void onFailParsing(Exception e) {
         getInfo = false;
-        if(callback != null) {
-            callback.onFail();
+        if(listener != null) {
+            listener.onFail();
         }
     }
 
     @Override
     public void onFailFindLocation(Exception e) {
         getInfo = false;
-        if(callback != null) {
-            callback.onFail();
+        if(listener != null) {
+            listener.onFail();
         }
     }
 
@@ -60,13 +59,17 @@ public class Sensor implements YahooWeatherInfoListener, YahooWeatherExceptionLi
             getInfo = true;
             this.weatherInfo = weatherInfo;
         }
-        if(callback != null) {
-            callback.onDataReceived();
+        if(listener != null) {
+            listener.onDataReceived();
         }
     }
 
     public void update() {
         mYahooWeather.queryYahooWeatherByGPS(ctx, this);
+    }
+
+    public void removeListener() {
+        this.listener = null;
     }
 
     public boolean canGetInfo() {

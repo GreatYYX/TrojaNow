@@ -48,7 +48,7 @@ public class NewStatusActivity extends ActionBarActivity {
         cbLocation = (CheckBox)findViewById(R.id.cb_location);
         cbTemperature = (CheckBox)findViewById(R.id.cb_temperature);
 
-        // bundle anonymous checkbox with location checkbox
+        // bind anonymous checkbox with location checkbox
         cbAnonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             boolean location_checked;
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

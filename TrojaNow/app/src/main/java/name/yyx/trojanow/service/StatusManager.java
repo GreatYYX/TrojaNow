@@ -74,13 +74,20 @@ public class StatusManager implements IStatus {
         return status;
     }
 
-    public List<Map<String, Object>> list(Account account){
+    @Override
+    public List<Map<String, Object>> list(Account account, boolean wantAnonymous) {
         JSONObject response;
         List<Status> statuses = new ArrayList<Status>();
 
         String auth = account.getUsername() + ":" + account.getToken();
         HttpAccessor httpAccessor = new HttpAccessor();
-        response = httpAccessor.get(URL + "statuses", auth);
+
+        if(wantAnonymous) {
+            response = httpAccessor.get(URL + "statuses", auth);
+        }
+        else{
+            response = httpAccessor.get(URL + "statuses/normal", auth);
+        }
 
         try {
             if(response.get("statusCode").toString().equals(STATUS_OK)){
@@ -117,4 +124,5 @@ public class StatusManager implements IStatus {
         }
         return listAdpter(statuses);
     }
+
 }

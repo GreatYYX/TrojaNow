@@ -158,6 +158,7 @@ public class NewStatusActivity extends ActionBarActivity {
         run = new Runnable() {
             @Override
             public void run() {
+
                 boolean isSuccess = false;
                 if(hasTemperature && hasLocation){
                     isSuccess = controller.createStatus(status, isAnonymous, Integer.toString(temperature), location);

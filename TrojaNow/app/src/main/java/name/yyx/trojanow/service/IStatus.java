@@ -13,6 +13,6 @@ public interface IStatus {
 
     public Status create(Status status);
 
-    public List<Map<String, Object>> list(Account account);
+    public List<Map<String, Object>> list(Account account, boolean wantAnonymous);
 
 }

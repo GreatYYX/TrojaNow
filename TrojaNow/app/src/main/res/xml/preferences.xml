@@ -19,6 +19,7 @@
         />
 
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="accept_anonymous"
             android:title="Accept anonymous status"
             />

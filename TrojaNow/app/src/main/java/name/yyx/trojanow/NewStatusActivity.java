@@ -146,15 +146,15 @@ public class NewStatusActivity extends ActionBarActivity {
                     new Thread(run).start();
                 } else {
                     pCircle.dismiss();
-                    Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Can not get start data", Toast.LENGTH_SHORT).show();
                 }
-                sensor.removeListener();
+//                sensor.removeListener();
             }
             @Override
             public void onFail() {
                 pCircle.dismiss();
-                Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
-                sensor.removeListener();
+//                Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
+//                sensor.removeListener();
             }
         });
 

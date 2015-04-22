@@ -36,7 +36,7 @@ public class StatusManager implements IStatus {
         }
     }
 
-    private List<Map<String, Object>> listAdpter(List<Status> statuses){
+    private List<Map<String, Object>> listAdpter(List<Status> statuses, Account account){
         List<Map<String, Object>> statusList = new ArrayList<Map<String, Object>>();
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -47,8 +47,13 @@ public class StatusManager implements IStatus {
         for(int i = 0; i < statuses.size(); i++){
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("content", statuses.get(i).getContent());
-            map.put("author", statuses.get(i).getAccount().getNickname());
 
+            if(statuses.get(i).isAnonymous() &&
+                    !statuses.get(i).getAccount().getUsername().equals(account.getUsername())){
+                map.put("author", "anonymous");
+            }else {
+                map.put("author", statuses.get(i).getAccount().getNickname());
+            }
             calendar.setTime(statuses.get(i).getDate());
             calendar.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
             map.put("date", sdf.format(calendar.getTime()).toString());
@@ -123,6 +128,11 @@ public class StatusManager implements IStatus {
                 for(int i = 0; i < s.length();i++) {
                     Status status = new Status();
                     int id = Integer.parseInt(s.getJSONObject(i).get("id").toString());
+
+                    boolean isAnonymous = false;
+                    if(s.getJSONObject(i).get("anonymous").toString().equals("1")){
+                        isAnonymous = true;
+                    }
                     String author = s.getJSONObject(i).get("author").toString();
                     String authorNick = s.getJSONObject(i).get("author_nickname").toString();
                     String content = s.getJSONObject(i).get("content").toString();
@@ -143,6 +153,7 @@ public class StatusManager implements IStatus {
                     }
 
                     status.setId(id);
+                    status.setAnonymous(isAnonymous);
                     Account user = new Account();
                     user.setUsername(author);
                     user.setNickname(authorNick);
@@ -159,7 +170,7 @@ public class StatusManager implements IStatus {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return listAdpter(statuses);
+        return listAdpter(statuses, account);
     }
 
 }

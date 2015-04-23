@@ -36,7 +36,6 @@ public class NewStatusActivity extends ActionBarActivity {
 
     private Handler handler;
     private Runnable run;
-    private int flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,6 @@ public class NewStatusActivity extends ActionBarActivity {
         cbAnonymous = (CheckBox)findViewById(R.id.cb_anonymous);
         cbLocation = (CheckBox)findViewById(R.id.cb_location);
         cbTemperature = (CheckBox)findViewById(R.id.cb_temperature);
-        flag = 0;
 
         // bind anonymous checkbox with location checkbox
         cbAnonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -146,15 +144,15 @@ public class NewStatusActivity extends ActionBarActivity {
                     new Thread(run).start();
                 } else {
                     pCircle.dismiss();
-//                    Toast.makeText(getApplicationContext(), "Can not get start data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Can not get start data", Toast.LENGTH_SHORT).show();
                 }
-//                sensor.removeListener();
+                sensor.removeListener(); // remove listener after get first message
             }
             @Override
             public void onFail() {
                 pCircle.dismiss();
-//                Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
-//                sensor.removeListener();
+                Toast.makeText(getApplicationContext(), "Can not get sensor data", Toast.LENGTH_SHORT).show();
+                sensor.removeListener();
             }
         });
 
@@ -163,23 +161,19 @@ public class NewStatusActivity extends ActionBarActivity {
             @Override
             public void run() {
 
-//                sensor = null;
                 boolean isSuccess = false;
-                if(flag == 0) {
-                    if (hasTemperature && hasLocation) {
-                        isSuccess = controller.createStatus(status, isAnonymous, Integer.toString(temperature), location);
-                    } else if (!hasTemperature && hasLocation) {
-                        isSuccess = controller.createStatus(status, isAnonymous, null, location);
-                    } else if (!hasLocation && hasTemperature) {
-                        isSuccess = controller.createStatus(status, isAnonymous, Integer.toString(temperature), null);
-                    }
+                if (hasTemperature && hasLocation) {
+                    isSuccess = controller.createStatus(status, isAnonymous, Integer.toString(temperature), location);
+                } else if (!hasTemperature && hasLocation) {
+                    isSuccess = controller.createStatus(status, isAnonymous, null, location);
+                } else if (!hasLocation && hasTemperature) {
+                    isSuccess = controller.createStatus(status, isAnonymous, Integer.toString(temperature), null);
+                }
 
-                    if (isSuccess) {
-                        new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
-                    } else {
-                        new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
-                    }
-                    flag = 1;
+                if (isSuccess) {
+                    new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
+                } else {
+                    new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
                 }
             }
         };

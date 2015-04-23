@@ -118,6 +118,8 @@ public class StatuesFragment extends Fragment {
             // delete icon if location or temperature not exists
             if(data.get(position).get("location") == null) {
                 location.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)location.getLayoutParams();
+                mlp.setMargins(0, 0, 0, 0);
             }
             if(data.get(position).get("temperature") == null) {
                 temperature.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

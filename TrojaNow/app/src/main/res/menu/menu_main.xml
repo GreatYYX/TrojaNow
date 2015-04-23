@@ -1,0 +1,31 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item
+        android:title="menu_item_plus"
+        android:id="@+id/menu_item_plus"
+        android:icon="@drawable/actbar_add"
+        app:showAsAction="always"
+        >
+        <menu>
+            <item android:id="@+id/menu_item_new_status"
+                android:icon="@drawable/popup_status"
+                android:title="@string/menu_item_new_status"/>
+            <!--<item android:id="@+id/menu_item_new_chat"-->
+                <!--android:title="@string/menu_item_new_chat"-->
+                <!--android:icon="@drawable/popup_chat"/>-->
+            <item android:id="@+id/menu_item_add_follow"
+                android:title="@string/menu_item_add_follow"
+                android:icon="@drawable/popup_add_follow"/>
+            <item android:id="@+id/menu_item_settings"
+                android:title="@string/menu_item_settings"
+                android:icon="@drawable/popup_setting"/>
+
+
+        </menu>
+    </item>
+
+    <!--<item android:id="@+id/action_settings" android:title="@string/action_settings"-->
+        <!--android:orderInCategory="100" app:showAsAction="never" />-->
+</menu>

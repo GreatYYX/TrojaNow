@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".NewStatsActivity">
+    <item
+        android:title="menu_item_post"
+        android:id="@+id/menu_item_post"
+        android:icon="@drawable/actbar_send"
+        app:showAsAction="always"
+    />
+</menu>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
+        <option name="gradleHome" value="F:\ProgrammingTool\Android\Android Studio\gradle\gradle-2.2.1" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/libs" />
+            <option value="$PROJECT_DIR$/libs/PagerSlidingTabStrip" />
+            <option value="$PROJECT_DIR$/libs/QuickScroll" />
+          </set>
+        </option>
+=======
+>>>>>>> 8603371fed89a5caa2d0e9a0c35605eb04eea333
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
+

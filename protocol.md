@@ -9,12 +9,11 @@ References:
 - JSON formatter: `http://jsonformatter.curiousconcept.com/`
 
 # Common Request Format #
-- Domain: `www.example.com:1024`
-- Request: `METHOD` `Domain/[Resource URL].json`
+- Domain: `www.example.com:port`
+- Request: `METHOD` `Domain/[Resource URL]`
 - Content-Type: `application/json`
 
 # Status Code #
-
 - `200` OK
 - `201` CREATED
 - `204` NO_CONTENT
@@ -30,7 +29,7 @@ References:
 
 All of the Resource URLs and METHOD with it are explained below, including request body & response body with correct status code.
 
-If error occurs, status code will be set, response body will be:
+If error occurs, `status code` will be set, response body will be:
 
 	{
 		"error": @string(message)
@@ -38,7 +37,7 @@ If error occurs, status code will be set, response body will be:
 
 If the request needs authorization, the header should include a `Authorization` field (noted as `AUTH` below). The value of this field is `user:token`.
 
-Remember aLL of users' input should be filtered both on client and server for avoiding SQL injection or CSRF.
+Remember all of users' input should be filtered both on client and server for avoiding SQL injection or CSRF.
 
 ## POST /test
 
@@ -60,9 +59,9 @@ Response: OK
 Request:
 
     {
-    	"user": @string(0-9A-Za-z_, start with alphabet 6-12 length),
+    	"user": @string(0-9A-Za-z_, start with alphabet, 6-10 length),
 		"password": @string(0-9A-Za-z_, start with alphabet, 6-12 length),
-    	"nickname": @string(2-12 length)
+    	"nickname": @string(2-18 length)
     }
 
 Response: CREATED
@@ -80,8 +79,8 @@ Request:
 Response: OK
 
 	{
-		"token": @string
-		"timestamp": @string (UNIX timestamp)
+		"token": @string,
+		"timestamp": @string (UNIX timestamp, not support yet)
 	}
 
 ## GET /account/signout
@@ -112,14 +111,14 @@ Request:
 		"content": @string,
 		"anonymous": @bool,
 		"temperature": @string(unit in centigrade) | null,
-		"location": [@int(latitude), @int(longitude)] | null
+		"location": [@number(latitude), @number(longitude)] | null
     }
 
 Response: CREATED
 
 	{
-		"id": @int
-		"date": @int
+		"id": @number
+		"date": @number(UNIX timestamp)
 	}
 
 ## DELETE /statuses/:id
@@ -139,61 +138,39 @@ Request:
 Response: OK
 
 	{
-		"next_cursor": @int(not support yet),
+		"next_cursor": @number(not support yet),
 		"statuses": [
 			{
-				"id": @int,
+				"id": @number,
 		    	"author": @string,
 		    	"author_nickname": @string,
 				"content": @string,
-				"date": @string(UNIX timestamp),
+				"anonymous": @bool,
+				"date": @number(UNIX timestamp),
 				"temperature": @string | null,
-				"location": [@int(latitude), @int(longitude)] | null
+				"location": [@number(latitude), @number(longitude)] | null
 		    },
 			{...},
 			{...}
 		]
 	}
 
-In request, type is optional, default value is unconstrained.
+In request, type is optional, default value is unconstrained (to anonymous).
 Server will return at most 20 statuses once.
+If no statues, the value of field "statuses" will be an empty array.
 
-## GET /chat/:friend
-
-Request:
-	
-	AUTH
-
-Response: OK
-
-	{
-    	"ip": @string
-	}
-
-
-## POST /friends
+## POST /follows
 
 Request:
 
 	AUTH
     {
-		"friend": @string
+		"follow": @string
     }
 
-Response: OK
+Response: CREATED
 
-## PUT /friends/:friend
-
-Request:
-
-	AUTH
-	{
-		"accept": @bool
-	}
-
-This is for accepting new friend request or not.
-
-## GET /friends
+## GET /follows
 
 Request:
 
@@ -202,31 +179,23 @@ Request:
 Response: OK
 
 	{
-		"friends": [
-			@string,
-			@string,
-			...,
-			@string
+		"follows": [
+			{
+				"user": @string,
+				"nickname": @string
+			},
+			{...},
+			{...}
 		]
 	}
 
-## DELETE /friends/:id
+If no follow, the value of field "follows" will be an empty array.
+
+## DELETE /follows/:id
 
 Request:
 
     AUTH
-
-Response: OK
-
-## PUT /sessions
-
-Request:
-
-	AUTH
-    {
-		"location": [@int, @int],
-		"temperature": @string
-    }
 
 Response: OK
 
@@ -234,32 +203,11 @@ Response: OK
 
 Server will push back notifications to client by MQTT protocol. Client should also connect to MQTT server when signing in.
 
-## New friend request
-
-	{
-		"type": "NEW_FRIEND",
-		"data": {
-			"user": @string
-		}
-	}
-
-## Accepted new friend request
+## New follow
 	
 	{
-		"type": "NEW_FRIEND_ACCEPT",
-		"data": {
-			"user": @string,
-			"nickname": @string
-		}
-	}
-
-## Rejected new friend request
-	
-	{
-		"type": "NEW_FRIEND_REJECT",
-		"data": {
-			"user": @string
-		}
+		"type": "NEW_FOLLOW",
+		"user": @string
 	}
 
 ## New status available

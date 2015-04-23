@@ -1,0 +1,31 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="name.yyx.trojanow.StatuesFragment"
+    android:id="@+id/fragment_status">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:id="@+id/pull_to_refresh_listview"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                ptr:ptrPullLabel="Pull to refresh..."
+                ptr:ptrRefreshLabel="Loading..."
+                ptr:ptrReleaseLabel="Release to refresh..."
+                ptr:ptrHeaderTextColor="#999999"
+            />
+            <!--<ListView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/listView" />-->
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/my_recycler_view"-->
+                <!--android:scrollbars="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"/>-->
+
+        </LinearLayout>
+
+</FrameLayout>

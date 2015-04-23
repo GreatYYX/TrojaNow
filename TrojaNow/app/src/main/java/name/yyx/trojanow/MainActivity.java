@@ -33,6 +33,7 @@ public class MainActivity extends ActionBarActivity {
     private MainPagerAdapter adapter;
     private ServerPushManager pushMgr;
     private NotificationManager notifMgr;
+    private FollowFragment followFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
         // page view
         adapter = new MainPagerAdapter(getSupportFragmentManager());
         viewpager = (ViewPager)findViewById(R.id.viewpager);
-        viewpager.setOffscreenPageLimit(3);
+        viewpager.setOffscreenPageLimit(2);
         viewpager.setAdapter(adapter);
 
         // slide tap strip
@@ -73,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
                 showNotification(id, msg);
             }
         });
-//        pushMgr.start();
+        pushMgr.start();
 
     }
 
@@ -105,7 +106,6 @@ public class MainActivity extends ActionBarActivity {
 //            case R.id.menu_item_new_chat:
 //                break;
             case R.id.menu_item_add_follow:
-//                showNotification(0, "message");//for test
                 DialogFragment dlg = new AddFollowDialogFragment();
                 dlg.show(getSupportFragmentManager(), "add follow dlg");
                 break;
@@ -116,6 +116,11 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void refreshFollowList() {
+        if(followFragment != null )
+            followFragment.refreshList();
     }
 
     public void addNotificationDot(int position) {
@@ -185,7 +190,8 @@ public class MainActivity extends ActionBarActivity {
                 case 0:
                     return StatuesFragment.newInstance();
                 case 1:
-                    return FollowFragment.newInstance();
+                    followFragment = FollowFragment.newInstance();
+                    return followFragment;
                 default: //not used
                     return BlankFragment.newInstance(TITLE[i]);
             }

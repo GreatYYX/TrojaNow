@@ -116,7 +116,7 @@ public class FollowFragment extends Fragment {
             @Override
             public void run() {
                 data.clear();
-                List<Map<String, Object>> followers = controller.listFollowees();
+                List<Map<String, Object>> followers = controller.listFollowers();
                 for(int i = 0; i < followers.size(); i++) {
                     data.add(followers.get(i));
                 }

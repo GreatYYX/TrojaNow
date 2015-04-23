@@ -36,11 +36,11 @@ public class FollowManager implements IFollow{
             listFollowers.add(map);
         }
 
-        return java.util.Collections.sort(listFollowers);
+        return listFollowers;
     }
 
     @Override
-    public boolean follow(Account account,String followee) {
+    public boolean follow(Account account,String follower) {
         JSONObject request = new JSONObject();
         JSONObject response;
 
@@ -48,7 +48,7 @@ public class FollowManager implements IFollow{
         HttpAccessor httpAccessor = new HttpAccessor();
 
         try {
-            request.put("follow", followee);
+            request.put("follow", follower);
 
             response = httpAccessor.post(URL+ "follows", request, auth);
 
@@ -66,7 +66,7 @@ public class FollowManager implements IFollow{
     }
 
     @Override
-    public List<Map<String, Object>> listFollowees(Account account) {
+    public List<Map<String, Object>> listFollowers(Account account) {
         List<Account> followers = new ArrayList<Account>();
         JSONObject response;
 

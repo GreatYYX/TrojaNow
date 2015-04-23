@@ -31,13 +31,13 @@ public class SigninActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         controller = (Controller)getApplicationContext();
 
-        // splash
-//        startActivity(new Intent(SigninActivity.this, SplashActivity.class));
-
         // judge if already signed in
         if(controller.isSignedIn()) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
+        } else {
+            // splash
+            startActivity(new Intent(SigninActivity.this, SplashActivity.class));
         }
 
         setContentView(R.layout.activity_signin);

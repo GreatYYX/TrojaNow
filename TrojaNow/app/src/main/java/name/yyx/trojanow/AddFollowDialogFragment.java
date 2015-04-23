@@ -63,7 +63,7 @@ public class AddFollowDialogFragment extends DialogFragment {
                                     new Message().obtain(handler, ProgressCircle.SUCCESS).sendToTarget();
 
                                 }else{
-                                    Log.i("addFollowDialog", "controller error");
+                                    new Message().obtain(handler, ProgressCircle.ERROR).sendToTarget();
                                 }
                             }
                         };
@@ -114,6 +114,7 @@ public class AddFollowDialogFragment extends DialogFragment {
             switch(msg.what) {
                 case ProgressCircle.SUCCESS:
                     Toast.makeText(ctx, "Follow success!", Toast.LENGTH_SHORT).show();
+                    ((MainActivity)ctx).refreshFollowList();
                     break;
                 case ProgressCircle.ERROR:
                     Toast.makeText(ctx, "Follow failed!", Toast.LENGTH_SHORT).show();

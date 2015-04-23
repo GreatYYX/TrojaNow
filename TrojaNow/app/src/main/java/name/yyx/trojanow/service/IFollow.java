@@ -10,8 +10,8 @@ import name.yyx.trojanow.entity.Account;
  */
 public interface IFollow {
 
-    public boolean follow(Account account, String followee);
+    public boolean follow(Account account, String follower);
 
-    public List<Map<String, Object>> listFollowees(Account account);
+    public List<Map<String, Object>> listFollowers(Account account);
 
 }

@@ -185,9 +185,9 @@ public class Controller extends Application{
 
 /* ======================== friend ============================*/
 
-    public boolean follow(String followee){
+    public boolean follow(String follower){
         followService = new FollowManager();
-        if(followService.follow(account, followee)){
+        if(followService.follow(account, follower)){
             return true;
         }
         else{
@@ -195,9 +195,9 @@ public class Controller extends Application{
         }
     }
 
-    public List<Map<String, Object>> listFollowees(){
+    public List<Map<String, Object>> listFollowers(){
         followService = new FollowManager();
-        return followService.listFollowees(account);
+        return followService.listFollowers(account);
     }
 
 }

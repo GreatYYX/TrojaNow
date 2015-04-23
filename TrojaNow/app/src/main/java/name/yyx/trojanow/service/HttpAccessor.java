@@ -22,12 +22,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import name.yyx.trojanow.entity.Account;
-
-/**
- * Created by dell on 2015/4/11.
- */
 public class HttpAccessor {
+
+    public final static String STATUS_OK = "200";
+    public final static String STATUS_CREATED = "201";
+    public final static String URL = "http://trojanow.yyx.name:1234/";
+
     public JSONObject post(String url, JSONObject request) {
         return post(url, request, null);
     }

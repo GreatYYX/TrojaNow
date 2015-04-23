@@ -2,9 +2,6 @@ package name.yyx.trojanow.entity;
 
 import java.util.Date;
 
-/**
- * Created by dell on 2015/4/17.
- */
 public class Account implements Cloneable{
     private  String username;
 

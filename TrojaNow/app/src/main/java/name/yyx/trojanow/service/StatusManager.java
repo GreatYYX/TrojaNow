@@ -1,7 +1,5 @@
 package name.yyx.trojanow.service;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,13 +17,7 @@ import java.util.TimeZone;
 import name.yyx.trojanow.entity.Account;
 import name.yyx.trojanow.entity.Status;
 
-/**
- * Created by dell on 2015/4/19.
- */
 public class StatusManager implements IStatus {
-    private final static String STATUS_OK = "200";
-    private final static String STATUS_CREATED = "201";
-    private final static String URL = "http://trojanow.yyx.name:1234/";
 
     private boolean isNull(Object object){
         if(object == null){
@@ -94,8 +86,8 @@ public class StatusManager implements IStatus {
             String auth = status.getAccount().getUsername() + ":" + status.getAccount().getToken();
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.post(URL + "statuses", request, auth);
-            if(response.get("statusCode").toString().equals(STATUS_CREATED)){
+            response = httpAccessor.post(HttpAccessor.URL + "statuses", request, auth);
+            if(response.get("statusCode").toString().equals(HttpAccessor.STATUS_CREATED)){
                 long time = Long.parseLong(response.get("date").toString());
                 Date date = new Date(time);
                 status.setId(Integer.parseInt(response.get("id").toString()));
@@ -116,14 +108,14 @@ public class StatusManager implements IStatus {
         HttpAccessor httpAccessor = new HttpAccessor();
 
         if(wantAnonymous) {
-            response = httpAccessor.get(URL + "statuses", auth);
+            response = httpAccessor.get(HttpAccessor.URL + "statuses", auth);
         }
         else{
-            response = httpAccessor.get(URL + "statuses/normal", auth);
+            response = httpAccessor.get(HttpAccessor.URL + "statuses/normal", auth);
         }
 
         try {
-            if(response.get("statusCode").toString().equals(STATUS_OK)){
+            if(response.get("statusCode").toString().equals(HttpAccessor.STATUS_OK)){
                 JSONArray s = (JSONArray)response.getJSONArray("statuses");
                 for(int i = 0; i < s.length();i++) {
                     Status status = new Status();

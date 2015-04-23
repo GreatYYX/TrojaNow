@@ -1,12 +1,12 @@
 package zh.wang.android.apis.yweathergetter4a;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 class ImageUtils {
 	public static Bitmap getBitmapFromWeb(String src) {

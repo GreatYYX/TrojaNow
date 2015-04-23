@@ -2,9 +2,6 @@ package name.yyx.trojanow.entity;
 
 import java.util.Date;
 
-/**
- * Created by dell on 2015/4/19.
- */
 public class Status {
 
     private int id;

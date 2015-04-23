@@ -17,10 +17,10 @@
 
 package zh.wang.android.apis.yweathergetter4a;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import android.graphics.Bitmap;
 
 /**
  * A wrapper for all weather information provided by Yahoo weather apis.

@@ -1,14 +1,5 @@
 package name.yyx.trojanow.serverpush;
 
-import java.io.IOException;
-
-import com.ibm.mqtt.IMqttClient;
-import com.ibm.mqtt.MqttClient;
-import com.ibm.mqtt.MqttException;
-import com.ibm.mqtt.MqttPersistence;
-import com.ibm.mqtt.MqttPersistenceException;
-import com.ibm.mqtt.MqttSimpleCallback;
-
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,12 +12,16 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.support.v4.app.NotificationCompat;
 
-import name.yyx.trojanow.MainActivity;
-import name.yyx.trojanow.R;
+import com.ibm.mqtt.IMqttClient;
+import com.ibm.mqtt.MqttClient;
+import com.ibm.mqtt.MqttException;
+import com.ibm.mqtt.MqttPersistence;
+import com.ibm.mqtt.MqttPersistenceException;
+import com.ibm.mqtt.MqttSimpleCallback;
+
+import java.io.IOException;
 
 public class PushService extends Service
 {

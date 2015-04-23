@@ -73,8 +73,8 @@ public class StatuesFragment extends Fragment {
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                // Do work to refresh the list here.
 
+                // Do work to refresh the list here.
                 acceptAnonymous = controller.readAccept(getActivity());
                 handler = new MessageHandler();
                 run = new Runnable() {
@@ -137,6 +137,7 @@ public class StatuesFragment extends Fragment {
 //                    pullToRefreshView.requestLayout();
                     pullToRefreshView.refreshDrawableState();
                     pullToRefreshView.onRefreshComplete();
+                    ((MainActivity)getActivity()).removeNotificationDot(0);
                     break;
                 default:
                     super.handleMessage(msg);

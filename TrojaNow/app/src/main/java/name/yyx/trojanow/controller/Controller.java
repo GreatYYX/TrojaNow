@@ -4,9 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +18,6 @@ import name.yyx.trojanow.service.IFollow;
 import name.yyx.trojanow.service.IStatus;
 import name.yyx.trojanow.service.StatusManager;
 
-/**
- * Created by dell on 2015/4/17.
- */
 public class Controller extends Application{
 
     public static final String TROJANOW_PREFERENCES = "TrojanowPrefs";

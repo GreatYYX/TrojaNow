@@ -1,10 +1,9 @@
 package name.yyx.trojanow;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +14,8 @@ import name.yyx.trojanow.widget.ProgressCircle;
 
 
 public class RegisterActivity extends ActionBarActivity {
+
+    public static final String TAG = "RegisterActivity";
 
     private Controller controller;
     private ProgressCircle pCircle;
@@ -89,8 +90,8 @@ public class RegisterActivity extends ActionBarActivity {
         public void handleMessage(Message msg) {
             switch(msg.what) {
                 case ProgressCircle.SUCCESS:
-                    startActivity(new Intent(RegisterActivity.this, SigninActivity.class));
-                    finish();
+                    Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
                     break;
                 case ProgressCircle.ERROR:
                     Toast.makeText(RegisterActivity.this, "Register failed!", Toast.LENGTH_SHORT).show();

@@ -17,6 +17,19 @@
 
 package zh.wang.android.apis.yweathergetter4a;
 
+import android.content.Context;
+import android.location.Location;
+import android.os.AsyncTask;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,20 +42,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
 import zh.wang.android.apis.yweathergetter4a.UserLocationUtils.LocationResult;
 import zh.wang.android.apis.yweathergetter4a.WeatherInfo.ForecastInfo;
-import android.content.Context;
-import android.location.Location;
-import android.os.AsyncTask;
 
 /**
  * A wrapper for accessing Yahoo weather informations. 

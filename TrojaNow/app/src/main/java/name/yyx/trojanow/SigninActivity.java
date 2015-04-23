@@ -2,15 +2,15 @@ package name.yyx.trojanow;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.Toast;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import name.yyx.trojanow.controller.Controller;
 import name.yyx.trojanow.widget.ProgressCircle;
@@ -31,13 +31,13 @@ public class SigninActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         controller = (Controller)getApplicationContext();
 
+        // splash
+        startActivity(new Intent(SigninActivity.this, SplashActivity.class));
+
         // judge if already signed in
         if(controller.isSignedIn()) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
-        } else {
-            // splash
-            startActivity(new Intent(SigninActivity.this, SplashActivity.class));
         }
 
         setContentView(R.layout.activity_signin);

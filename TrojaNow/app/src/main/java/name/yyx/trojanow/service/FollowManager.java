@@ -7,23 +7,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import name.yyx.trojanow.entity.Account;
 
-/**
- * Created by dell on 2015/4/22.
- */
 public class FollowManager implements IFollow{
-
-    private final static String STATUS_OK = "200";
-    private final static String STATUS_CREATED = "201";
-    private final static String URL = "http://trojanow.yyx.name:1234/";
 
     private List<Map<String, Object>> listAdapter(List<Account>  followers){
         List<Map<String, Object>> listFollowers = new ArrayList<Map<String, Object>>();
@@ -50,13 +40,13 @@ public class FollowManager implements IFollow{
         try {
             request.put("follow", follower);
 
-            response = httpAccessor.post(URL+ "follows", request, auth);
+            response = httpAccessor.post(HttpAccessor.URL+ "follows", request, auth);
 
             if(response == null){
                 Log.i("FollowManager", "follow HTTP error");
             }
 
-            if(response.get("statusCode").toString().equals(STATUS_CREATED)){
+            if(response.get("statusCode").toString().equals(HttpAccessor.STATUS_CREATED)){
                 return true;
             }
         } catch (JSONException e) {
@@ -73,10 +63,10 @@ public class FollowManager implements IFollow{
         String auth = account.getUsername() + ":" + account.getToken();
         HttpAccessor httpAccessor = new HttpAccessor();
 
-        response = httpAccessor.get(URL + "follows", auth);
+        response = httpAccessor.get(HttpAccessor.URL + "follows", auth);
 
         try {
-            if(response.get("statusCode").toString().equals(STATUS_OK)){
+            if(response.get("statusCode").toString().equals(HttpAccessor.STATUS_OK)){
                 JSONArray f = response.getJSONArray("follows");
 
                 for(int i = 0; i < f.length(); i++){

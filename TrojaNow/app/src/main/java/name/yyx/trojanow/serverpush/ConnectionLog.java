@@ -1,5 +1,7 @@
 package name.yyx.trojanow.serverpush;
 
+import android.os.Environment;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -7,8 +9,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import android.os.Environment;
 
 public class ConnectionLog
 {

@@ -1,25 +1,13 @@
 package name.yyx.trojanow.service;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
-
 import name.yyx.trojanow.entity.Account;
-import name.yyx.trojanow.service.HttpAccessor;
-import name.yyx.trojanow.service.IAccount;
 
-/**
- * Created by dell on 2015/4/17.
- */
 public class AccountManager implements IAccount{
-
-    private final static String STATUS_OK = "200";
-    private final static String STATUS_CREATED = "201";
-    private final static String URL = "http://trojanow.yyx.name:1234/";
 
     public Account signIn(Account account){
 
@@ -33,13 +21,13 @@ public class AccountManager implements IAccount{
             request.put("ip", account.getIp());
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.put(URL + "account/signin", request);
+            response = httpAccessor.put(HttpAccessor.URL + "account/signin", request);
 
             if (response == null){
                 Log.i("AccountImpl", "sign in HTTP error");
             }
 
-            if (response.get("statusCode").toString().equals(STATUS_OK)){
+            if (response.get("statusCode").toString().equals(HttpAccessor.STATUS_OK)){
 //                long time = Long.parseLong(response.get("timestamp").toString());
 //                Date timeStamp = new Date(time);
                 String token = (String)response.get("token");
@@ -62,13 +50,13 @@ public class AccountManager implements IAccount{
             String auth = account.getUsername() + ":" + account.getToken();
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.get(URL + "account/signout", auth);
+            response = httpAccessor.get(HttpAccessor.URL + "account/signout", auth);
 
             if(response == null){
                 Log.i("AccountImpl", "sign out HTTP error");
             }
 
-            if(response.get("statusCode").toString().equals(STATUS_OK)){
+            if(response.get("statusCode").toString().equals(HttpAccessor.STATUS_OK)){
                 return true;
             }
         } catch (JSONException e) {
@@ -87,13 +75,13 @@ public class AccountManager implements IAccount{
             request.put("nickname", account.getNickname());
 
             HttpAccessor httpAccessor = new HttpAccessor();
-            response = httpAccessor.post(URL + "account/reg",request);
+            response = httpAccessor.post(HttpAccessor.URL + "account/reg",request);
 
             if(response == null){
                 Log.i("AccountImpl", "register HTTP error");
             }
 
-            if(response.get("statusCode").toString().equals(STATUS_CREATED)){
+            if(response.get("statusCode").toString().equals(HttpAccessor.STATUS_CREATED)){
                 return true;
             }
         } catch (JSONException e) {

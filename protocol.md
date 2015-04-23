@@ -9,12 +9,11 @@ References:
 - JSON formatter: `http://jsonformatter.curiousconcept.com/`
 
 # Common Request Format #
-- Domain: `www.example.com:1024`
-- Request: `METHOD` `Domain/[Resource URL].json`
+- Domain: `www.example.com:port`
+- Request: `METHOD` `Domain/[Resource URL]`
 - Content-Type: `application/json`
 
 # Status Code #
-
 - `200` OK
 - `201` CREATED
 - `204` NO_CONTENT
@@ -60,9 +59,9 @@ Response: OK
 Request:
 
     {
-    	"user": @string(0-9A-Za-z_, start with alphabet 6-12 length),
+    	"user": @string(0-9A-Za-z_, start with alphabet, 6-10 length),
 		"password": @string(0-9A-Za-z_, start with alphabet, 6-12 length),
-    	"nickname": @string(2-12 length)
+    	"nickname": @string(2-18 length)
     }
 
 Response: CREATED
@@ -139,7 +138,7 @@ Request:
 Response: OK
 
 	{
-		"next_cursor": @int(not support yet),
+		"next_cursor": @number(not support yet),
 		"statuses": [
 			{
 				"id": @number,
@@ -147,7 +146,7 @@ Response: OK
 		    	"author_nickname": @string,
 				"content": @string,
 				"anonymous": @bool,
-				"date": @string(UNIX timestamp),
+				"date": @number(UNIX timestamp),
 				"temperature": @string | null,
 				"location": [@number(latitude), @number(longitude)] | null
 		    },
@@ -190,6 +189,8 @@ Response: OK
 		]
 	}
 
+If no follow, the value of field "follows" will be an empty array.
+
 ## DELETE /follows/:id
 
 Request:
@@ -197,8 +198,6 @@ Request:
     AUTH
 
 Response: OK
-
-If no follow, the value of field "follows" will be an empty array.
 
 # Server Pushed Notification
 

@@ -3,6 +3,7 @@ package name.yyx.trojanow;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import name.yyx.trojanow.controller.Controller;
+import name.yyx.trojanow.widget.ProgressCircle;
 
 public class FollowFragment extends Fragment {
 
@@ -67,13 +69,6 @@ public class FollowFragment extends Fragment {
             data = (List<Map<String, Object>>) savedInstanceState.getSerializable("data");
         } else {
             data = new ArrayList<Map<String, Object>>();
-            String[] author = {"an","an","an","an","an","yao", "yao","yao","yao","yao","zhang","zhang","zhang","zhang","zhang"};
-            for (int i = 0; i < 15; i++) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("user", author[i]);
-                map.put("nickname", "ABCDEFG");
-                data.add(map);
-            }
         }
         adapter = new FollowAdapter(
                 getActivity(), data, R.layout.listview_item_follow,
@@ -127,7 +122,25 @@ public class FollowFragment extends Fragment {
             }
         });
 
+        handler = new MessageHandler();
+        refreshList();
+
         return rootView;
+    }
+
+    public void refreshList() {
+        run = new Runnable() {
+            @Override
+            public void run() {
+                data.clear();
+                List<Map<String, Object>> followers = controller.listFollowees();
+                for(int i = 0; i < followers.size(); i++) {
+                    data.add(followers.get(i));
+                }
+                new Message().obtain(handler, ProgressCircle.END).sendToTarget();
+            }
+        };
+        new Thread(run).start();
     }
 
     public class FollowAdapter extends SimpleAdapter implements Scrollable {
@@ -148,4 +161,17 @@ public class FollowFragment extends Fragment {
         }
     }
 
+    class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case ProgressCircle.END:
+                    adapter.notifyDataSetChanged();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+            removeMessages(msg.what);
+        }
+    }
 }

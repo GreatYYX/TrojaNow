@@ -82,23 +82,6 @@ public class FollowFragment extends Fragment {
         search = (EditText)rootView.findViewById(R.id.et_search);
         list.setAdapter(adapter);
 
-        //list content
-
-
-
-//        run = new Runnable() {
-//            @Override
-//            public void run() {
-////            data.clear();
-//                List<Map<String, Object>> followers = new ArrayList<Map<String, Object>>();
-//                for(int i = 0; i < followers.size(); i++){
-//                    data.add(followers.get(i));
-//                }
-//
-//            }
-//        };
-//        new Thread(run).start();
-
         scroll.init(QuickScroll.TYPE_INDICATOR_WITH_HANDLE, list, adapter, QuickScroll.STYLE_HOLO);
         scroll.setFixedSize(1);
         scroll.setHandlebarColor(QuickScroll.GREY_DARK, QuickScroll.GREY_LIGHT, QuickScroll.GREY_SCROLLBAR);

@@ -7,10 +7,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import name.yyx.trojanow.entity.Account;
 
@@ -34,7 +36,7 @@ public class FollowManager implements IFollow{
             listFollowers.add(map);
         }
 
-        return listFollowers;
+        return java.util.Collections.sort(listFollowers);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class FollowManager implements IFollow{
         response = httpAccessor.get(URL + "follows", auth);
 
         try {
-            if(response.get("statusCode").equals(STATUS_OK)){
+            if(response.get("statusCode").toString().equals(STATUS_OK)){
                 JSONArray f = response.getJSONArray("follows");
 
                 for(int i = 0; i < f.length(); i++){

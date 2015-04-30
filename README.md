@@ -19,3 +19,16 @@ Feel free to contact us if you have any questions.
 
 - It's not easy for mobile apps creating P2P chatting under 2 different private local networks for NAT, although there is a technology called NAT Punch-through.
 - Security of data exchange of server and app should be enhanced.
+
+# Screenshots
+
+<img width="300" height="500" src="screenshots/splash.png" />
+<img width="300" height="500" src="screenshots/register.png" />
+<img width="300" height="500" src="screenshots/signin.png" />
+<img width="300" height="500" src="screenshots/status.png" />
+<img width="300" height="500" src="screenshots/follow.png" />
+<img width="300" height="500" src="screenshots/menu.png" />
+<img width="300" height="500" src="screenshots/create.png" />
+<img width="300" height="500" src="screenshots/add_follow.png" />
+<img width="300" height="500" src="screenshots/notification.png" />
+<img width="300" height="500" src="screenshots/setting.png" />
